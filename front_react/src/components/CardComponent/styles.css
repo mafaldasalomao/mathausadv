@@ -1,0 +1,37 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .card {
+    border: 2px solid #d3bff5; /* Cor roxa suave */
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .card-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #b38fe0; /* Ícone roxo */
+  }
+  

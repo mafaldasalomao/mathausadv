@@ -1,0 +1,15 @@
+/* styles.css */
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Garante que ocupe toda a altura da tela */
+  }
+  
+  .card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }

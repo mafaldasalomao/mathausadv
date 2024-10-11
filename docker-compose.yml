@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: back_flask/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - my-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: front_react/Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+  postgres:
+    image: postgres:16.3
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: my_pgadmin
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - 8090:80
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+networks:
+  my-network:
+    driver: bridge

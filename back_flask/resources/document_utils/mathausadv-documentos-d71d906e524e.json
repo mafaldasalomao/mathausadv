@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mathausadv-documentos",
+  "private_key_id": "d71d906e524e020248af9ef77c0328997a9d4df1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDRJbx7vpC3USTb\n4vAcZYJg2xZOoTLjB7NTs1uRADM5NKQPuLfQR/CxkJC1Mou+vwQguTAdlrSoTdgR\nnYPrwJ/omBkw8NhcD5jQrrdoSChTn1i34MgmLokOFqarxVnFUZ2hM5svT0tZUOTw\nAmCO8AaO2ZQph0L/z4y1ZxXBya0NukPBnCS5WmeoenacLlGLTB200YM+hVQOvYvG\nU+YZW93OJEsTUXZ/sTadPmmVJ5wFSqB/jKOLFDt3g9TYJqWlr1CRYN9upmP6OsD4\nEHg5g8Ars6JkB7SCqXU3yBIjgpkJMyEak5cW8prE/7vt9jaqOYI3hamiwZ1pnyiv\nGuc5Fm09AgMBAAECggEABtcXtmn07IBTfUfxytJcrkBCfYKmJs8X3VmIJoWw8/w1\nwjhFwrxN/r1+QUumG5a+hgRCGTJwAouK0O14fnUuH0eCMDVgTiDjqMeRQtba6S+h\nkWBhPpmjbK0iLFhnzdB6hrNb+vMgwSR1KFuOvuRr9a+sbQmtQxXA21n3JMxf9yS2\nQBlpbkNvrEGZgAhJ0YET4v6nRG4xVFH/oETjxPtVIWuIDUzFJNNLQ+nn+hSc4adR\nnKtymOlJnCM8pH2jUV1OqDxQBnktE2K5L77gz85gWfsDOqWjLc3y+qEBs2vOOSUM\nwaYuOk23Aq/Pbzl5fzpVIJI+DmI13bndTns9F9pDQQKBgQDpnBYIuYYT1k34jSkt\nZVJ6ost8x6IokCGThgd5ZXLF4JH4ygV1hc/uSPT8i3QAEUJ24B/cnZ1FykAbUAP5\nGcp3YQlRFLTD8XGuInelywhsS0GCX/58ygI4t3g5IRREL/fmUg/5WU80U162RAql\nxNaFq00dU57n8mC8rFo/MzeocQKBgQDlMW+p55mGSKVkIxxUZsszghX/mUckmf4h\nBMgPgowWPNiW1s1xmuxtVGjf6dZSa5ZziAg6PIV+GBU387C07jwhQ3q1+2XXxJZd\nPClGAxYAuvJyRsTlnZ8XvcaNTrC7l/yJjTvBCT+V4kFKkwwJxv+e68wrD5ZjlnkJ\nk+XyilSXjQKBgAKwCwjaqZI82vTLGvgsvEAw80piOZlh3yEFX7yj0Cg6pzNHj7yE\nZ5oEON1W9WSyziLz/Snanl6ZLxehWgpZo5yv/x1xsYq3kmlAeEPuDBDC5OQNGq5w\n3ImugrGVkdge/SknNIvX3TNq6iIKslyp4RX0nJSDy8Y7YaWKDhfADRnhAoGBALZu\nwVlWtoeC79Njdztfj0Nyupv3n/9sbDJQIgbmfSd+S1DVrjZNgQANfmUtNqHobZuM\nni/s2L1j4g/lc7SxJT+8/MI6V/iFzMJuDtRhxHPUWwPHfRbgfjBhqNf12QuZkTTU\nLMoc2HYv4JTBs4Vc1z/ipWNpRuYCclnDVffXUDpJAoGAYra8idIpezODKSMYQ7s/\n4Jo8HcdoR77ARhgRzw99cRsvBFP/KiiJTIZri2rmeVhO2Z1K0oSwIVvalQ+PaxfX\n+DjtUcaK+0Z9G34+z0xBsfWOFlB2zuIQJuR73V39iwrXozT4PVLxk36KUZO2j+3O\npHPybndaFxM1QZwAJ0Y9ZeQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "test-767@mathausadv-documentos.iam.gserviceaccount.com",
+  "client_id": "100785528757590144476",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-767%40mathausadv-documentos.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
