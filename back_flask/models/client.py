@@ -1,7 +1,7 @@
 from sql_alchemy import db
 
 class ClientModel(db.Model):
-    __tablename__ = 'product_client'
+    __tablename__ = 'contract_client'
 
     client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
@@ -9,15 +9,19 @@ class ClientModel(db.Model):
     address = db.Column(db.String(150))
     email = db.Column(db.String(150))
     phone = db.Column(db.String(150))
-    document_id = db.Column(db.Integer, db.ForeignKey('document.document_id'))
+    signer_type = db.Column(db.String(50))
+
+
+    contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
     
-    def __init__(self, name, cpf, address, email, phone, document_id):
+    def __init__(self, name, cpf, address, email, phone, signer_type, contract_id):
         self.name = name
         self.cpf = cpf
         self.address = address
         self.email = email
         self.phone = phone
-        self.document_id = document_id
+        self.signer_type = signer_type
+        self.contract_id = contract_id
 
     def json(self):
         return {
@@ -27,7 +31,8 @@ class ClientModel(db.Model):
             'address': self.address,
             'email': self.email,
             'phone': self.phone,
-            'document_id': self.document_id
+            'signer_type': self.signer_type,
+            'contract_id': self.contract_id
         }
 
     @classmethod
@@ -45,10 +50,11 @@ class ClientModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update_client(self, name, cpf, address, email, phone, document_id):
+    def update_client(self, name, cpf, address, email, phone, signer_type, contract_id):
         self.name = name
         self.cpf = cpf
         self.address = address
         self.email = email
         self.phone = phone
-        self.document_id = document_id
+        self.signer_type = signer_type
+        self.contract_id = contract_id

@@ -9,16 +9,19 @@ class DocumentModel(db.Model):
     description = db.Column(db.String(80), nullable=True)
     fees = db.Column(db.String(80))
     dsign_id = db.Column(db.String(120), nullable=True)
+    gdrive_id = db.Column(db.String(120), nullable=True)
     generated_at =  db.Column(db.DateTime, default=datetime.utcnow)
     signed_at = db.Column(db.DateTime, nullable=True)
-    clients = db.relationship('ClientModel')
+    contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
 
-    def __init__(self, name, description, dsign_id, signed_at, fees):
+    def __init__(self, name, description, dsign_id, gdrive_id, signed_at, fees, contract_id):
         self.name = name
         self.description = description
         self.dsign_id = dsign_id
+        self.gdrive_id = gdrive_id
         self.signed_at = signed_at
         self.fees = fees
+        self.contract_id = contract_id
 
     def json(self):
         document_json = {
@@ -27,8 +30,8 @@ class DocumentModel(db.Model):
             'description': self.description,
             'fees': self.fees,
             'dsign_id': self.dsign_id,
-            'quantity_parts': len(self.clients),
-            'parts':  [client.json() for client in self.clients]
+            'gdrive_id': self.gdrive_id,
+            'contract_id': self.contract_id
         }
 
         return document_json
@@ -42,7 +45,7 @@ class DocumentModel(db.Model):
     
     @classmethod
     def find_dsign_id_document(cls, dsign_id):
-        document =  cls.query.filter_by(url=dsign_id).first()
+        document =  cls.query.filter_by(dsign_id=dsign_id).first()
         if document:
             return document
         return None
@@ -52,18 +55,15 @@ class DocumentModel(db.Model):
         db.session.commit()
     
     def delete_document(self):
-        parts_to_delete = DocumentModel.query.filter_by(document_id=self.document_id).all()
-       
-        if (parts_to_delete  != []) or (len(self.clients) > 0):
-            return False
         db.session.delete(self)
         db.session.commit()
         return True
 
-    def update_document(self, name, description, dsign_id, signed_at,fees):
+    def update_document(self, name, description, dsign_id,gdrive_id, signed_at,fees):
         self.name = name
         self.description = description
         self.dsign_id = dsign_id
+        self.gdrive_id = gdrive_id
         self.signed_at = signed_at
         self.fees = fees
 
