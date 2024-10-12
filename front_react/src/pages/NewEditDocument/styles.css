@@ -1,6 +1,6 @@
 .container {
     margin-top: 32px;
-    background-color: var(--deep-black);
+    /* background-color: var(--deep-black); */
     border-radius: 8px;
     padding: 24px;
 }

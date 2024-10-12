@@ -1,8 +1,8 @@
 @import '../../colors.css';
 
-.container {
+.container-contract {
     margin-top: 32px;
-    background-color: var(--deep-black);
+    border: 1px solid var(--orange);
     border-radius: 8px;
     padding: 24px;
 }
@@ -16,12 +16,12 @@
 }
 
 .list {
-    background-color: var(--brown);
+    /* background-color: var(--brown); */
     border-radius: 8px;
 }
 
 .list-item {
-    background-color: var(--dark-brown);
+    /* background-color: var(--dark-brown); */
     margin-bottom: 8px;
     border-radius: 8px;
 }
@@ -36,26 +36,14 @@
     border-color: var(--dark-orange);
 }
 
-.dialog-title {
-    background-color: var(--deep-black);
-    color: var(--orange);
-}
-
-.dialog-content {
-    background-color: var(--deep-black);
-}
-
-.dialog-actions {
-    background-color: var(--deep-black);
-}
 
 .input-field {
     margin-bottom: 16px;
     input {
-        color: white;
+        color: rgb(0, 0, 0);
     }
     label {
-        color: white;
+        color: rgba(94, 94, 94, 0.712);
     }
 }
 
