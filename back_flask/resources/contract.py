@@ -33,12 +33,12 @@ class Contracts(Resource):
         try:
             #create drive folder
             timestamp_unix = int(time.time())
-            folder_id = create_folder(data['name'] + str(timestamp_unix))
+            folder_id = create_folder(data['name'] + "-" + str(timestamp_unix), '13DTt3-WM7yzVjELGaJPML7XsVB_40RFz')
             data['drive_folder_id'] = folder_id
             contract = ContractModel(**data)
             contract.save_contract()
-        except:
-            return {'message': 'An error occurred inserting the contract'}, 500
+        except Exception as e:
+            return {'message': f'An error occurred inserting the contract {e}'}, 500
         return contract.json(), 201
 
 class Contract(Resource):

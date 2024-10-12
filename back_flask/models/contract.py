@@ -20,7 +20,7 @@ class ContractModel(db.Model):
 
     def json(self):
         document_json = {
-            'contract_id': self.document_id,
+            'contract_id': self.contract_id,
             'name': self.name,
             'description': self.description,
             'drive_folder_id': self.drive_folder_id,

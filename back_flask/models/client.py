@@ -1,7 +1,7 @@
 from sql_alchemy import db
 
 class ClientModel(db.Model):
-    __tablename__ = 'contract_client'
+    __tablename__ = 'client'
 
     client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
