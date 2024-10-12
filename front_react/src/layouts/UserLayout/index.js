@@ -1,7 +1,7 @@
 
 import { Outlet, useNavigate  } from "react-router-dom";
 // import Footer from "../../components/Footer";
-
+import logoImage from '../../assets/Logo_crop.png';
 
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
@@ -138,7 +138,8 @@ const UserLayout = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" >
+                    <img src={logoImage} alt="" style={{width:'50px', height:'50px'}}/>
+                    <Typography variant="h6" noWrap component="div" style={{ color: '#A66329', marginLeft: '10px' }} >
                         MathausADV & advogados associados
                     </Typography>
                 </Toolbar>
