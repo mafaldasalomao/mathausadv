@@ -10,6 +10,7 @@ import PersistLogin from "./components/PersistLogin";
 import { AuthProvider } from "./contexts/AuthProvider";
 import RequiredAuth from "./layouts/RequiredAuth";
 import NewEditDocument from "./pages/NewEditDocument";
+import NewEditContract from "./pages/NewEditContract";
 export default function Routes() {
     return (
         <AuthProvider>
@@ -23,7 +24,8 @@ export default function Routes() {
                                                 <UserLayout />
                                 }>
                                     <Route path="dashboard" element={<Dashboard />} />
-                                    /* <Route path="documents/new" element={<NewEditDocument />} />
+                                    <Route path="documents/new" element={<NewEditDocument />} />
+                                    <Route path="contracts/new" element={<NewEditContract />} />
                                     {/* <Route path="products/new" element={<NewEditProduct />} />
                                     <Route path="productslist" element={<ProductList />} />
                                     <Route path="orderslist" element={<OrdersList />} />
