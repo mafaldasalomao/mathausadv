@@ -1,9 +1,7 @@
 
 import { Outlet, useNavigate  } from "react-router-dom";
 // import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import DrawerMenu from "../../components/DrawerMenu"
-import TitleText from "../../components/FullText";
+
 
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
@@ -116,16 +114,16 @@ const UserLayout = () => {
 
     const items = [
         { text: 'PDF', icon: <PictureAsPdfIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf' },
-        { text: 'Texto Completo', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/texto-completo' },
-        { text: 'Análise Petição Inicial', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/analise-pi' },
-        { text: 'Resumo Extrativo', icon: <DescriptionIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/resumo-extrativo' },
-        { text: 'Resumo Abstrativo', icon: <SummarizeIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/resumo-abstrativo' },
-        { text: 'Chat AI', icon: <ChatIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/chat-ai' },
+        // { text: 'Texto Completo', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/texto-completo' },
+        // { text: 'Análise Petição Inicial', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/analise-pi' },
+        // { text: 'Resumo Extrativo', icon: <DescriptionIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/resumo-extrativo' },
+        // { text: 'Resumo Abstrativo', icon: <SummarizeIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/resumo-abstrativo' },
+        // { text: 'Chat AI', icon: <ChatIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/chat-ai' },
     ];
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open} sx={{backgroundColor:'#A11A29'}} >
+            <AppBar position="fixed" open={open} sx={{backgroundColor:'#1c1c36'}} >
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -134,7 +132,7 @@ const UserLayout = () => {
                         edge="start"
                         sx={{
                             marginRight: 5,
-                            backgroundColor:'#A11A29',
+                            backgroundColor:'#1c1c36',
                             ...(open && { display: 'none' }),
                         }}
                     >

@@ -1,0 +1,63 @@
+.container {
+    margin-top: 32px;
+    background-color: var(--deep-black);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.title {
+    color: var(--orange);
+}
+
+.subtitle {
+    color: var(--orange);
+}
+
+.list {
+    background-color: var(--brown);
+    border-radius: 8px;
+}
+
+.list-item {
+    background-color: var(--dark-brown);
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.list-item-text {
+    color: white;
+}
+
+.button-add {
+    margin-bottom: 16px;
+    color: var(--dark-orange);
+    border-color: var(--dark-orange);
+}
+
+.dialog-title {
+    background-color: var(--deep-black);
+    color: var(--orange);
+}
+
+.dialog-content {
+    background-color: var(--deep-black);
+}
+
+.dialog-actions {
+    background-color: var(--deep-black);
+}
+
+.input-field {
+    margin-bottom: 16px;
+    input {
+        color: white;
+    }
+    label {
+        color: white;
+    }
+}
+
+.button-generate {
+    background-color: var(--orange);
+    color: white;
+}

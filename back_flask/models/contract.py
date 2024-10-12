@@ -1,5 +1,5 @@
 from sql_alchemy import db
-from datetime import datetime
+from datetime import datetime, timezone
 # from models.product import ProductModel
 class ContractModel(db.Model):
     __tablename__ = 'contract'
@@ -8,7 +8,8 @@ class ContractModel(db.Model):
     name = db.Column(db.String(80))
     description = db.Column(db.String(80), nullable=True)
     drive_folder_id = db.Column(db.String(80))
-    created_at =  db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     clients = db.relationship('ClientModel')
     documents = db.relationship('DocumentModel')
 
@@ -23,7 +24,8 @@ class ContractModel(db.Model):
             'name': self.name,
             'description': self.description,
             'drive_folder_id': self.drive_folder_id,
-            'created_at': self.created_at,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
             'clients':  [client.json() for client in self.clients],
             'documents':  [document.json() for document in self.documents]
         }

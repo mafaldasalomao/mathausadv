@@ -10,8 +10,8 @@ export default function Dashboard() {
         <>
             <div className="dashboard">
                 {/* <h1>Dashboard</h1> */}
-                <CardComponent  title={"Escrever um documento"}
-                                description={"Gere um documento com os campos para assinatura no D4sign"}/>
+                <CardComponent  title={"Gerar pasta de Contrato"}
+                                description={"Gere uma pasta pra um novo contrato e salve no GDrive"}/>
             </div>
         </>
     );
