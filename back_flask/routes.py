@@ -1,6 +1,6 @@
 from resources.user import User, UserRegister, UserLogin, UserLogout
 from resources.refresh_token import RefreshToken
-
+from resources.contract import Contracts, Contract
 def create_routes(api):    
 
     api.add_resource(User, '/api/users/<int:user_id>')
@@ -8,4 +8,7 @@ def create_routes(api):
     api.add_resource(UserLogin, '/api/v1/user/login')
     api.add_resource(UserLogout, '/api/v1/user/logout')
     api.add_resource(RefreshToken, '/api/v1/user/token/refresh')
+
+    api.add_resource(Contract , '/api/v1/user/contract/<int:contract_id>')
+    api.add_resource(Contracts, '/api/v1/user/contracts')
 
