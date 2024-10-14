@@ -1,36 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Typography, TextField } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Typography, TextField, CircularProgress, Icon } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import Pagination from '@mui/material/Pagination';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import './styles.css'; // Importa as cores personalizadas
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const ContractList = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const apiPrivate = useAxiosPrivate();
   const [contracts, setContracts] = useState([]);
   // Filtra os contratos com base no termo de busca
   const navigate = useNavigate();
 
-  
+
   useEffect(() => {
     const fetchContracts = async () => {
       try {
-        const response = await apiPrivate.get('/contracts');
+        setIsLoading(true);
+        const response = await apiPrivate.get(`/contracts?page=${page}&per_page=2`);
         setContracts(response.data.contracts);
+        setTotalPages(response.data.total_pages);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error('Erro ao buscar os contratos:', error);
       }
     };
     fetchContracts();
-  }, []);
+  }, [page]);
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
-  const contracts_ = [
-    { name: 'Contrato A', description: 'Descrição do contrato A', createdAt: '2024-10-10' },
-    { name: 'Contrato B', description: 'Descrição do contrato B', createdAt: '2024-10-11' },
-    { name: 'Contrato C', description: 'Descrição do contrato C', createdAt: '2024-10-12' },
-  ];
   // const filteredContracts = contracts.filter(
   //   (contract) =>
   //     contract.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -53,7 +62,8 @@ const ContractList = () => {
         onClick={handleCreateContract}
         style={{ marginBottom: '16px', backgroundColor: 'var(--orange)', color: 'white' }}
       >
-        Criar Novo Contrato
+        <AddIcon sx={{ marginRight: '8px' }} />
+        Novo Contrato
       </Button>
       <TextField
         label="Filtrar contratos"
@@ -81,24 +91,48 @@ const ContractList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contracts.map((contract, index) => (
-              <TableRow key={index}>
-                <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.name}</TableCell>
-                <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.description}</TableCell>
-                <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.created_at}</TableCell>
-                <TableCell>
-                  <IconButton aria-label="edit" style={{ color: 'var(--orange)' }}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton aria-label="delete" style={{ color: 'var(--dark-orange)' }}>
-                    <DeleteIcon />
-                  </IconButton>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  <CircularProgress />
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              contracts.map((contract, index) => (
+                <TableRow key={index}>
+                  <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.name}</TableCell>
+                  <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.description}</TableCell>
+                  <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.created_at}</TableCell>
+                  <TableCell>
+                    <IconButton aria-label="edit" style={{ color: 'var(--orange)' }}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete" style={{ color: 'var(--dark-orange)' }}>
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton aria-label="view" style={{ color: 'var(--orange)' }}>
+                      <VisibilityIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Pagination Component Separado da Tabela */}
+      {!isLoading &&
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+          <Pagination
+            count={totalPages}  // Número total de páginas
+            page={page}  // Página atual
+            onChange={handlePageChange}  // Função chamada quando a página é alterada
+            color="primary"
+          />
+        </div>
+      }
+
     </div>
   );
 };
