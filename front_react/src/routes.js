@@ -12,6 +12,7 @@ import RequiredAuth from "./layouts/RequiredAuth";
 import NewEditDocument from "./pages/NewEditDocument";
 import NewEditContract from "./pages/NewEditContract";
 import ContractList from "./pages/ContractList";
+import Contract from "./pages/Contract";
 export default function Routes() {
     return (
         <AuthProvider>
@@ -28,6 +29,7 @@ export default function Routes() {
                                     <Route path="documents/new" element={<NewEditDocument />} />
                                     <Route path="contracts" element={<ContractList />} />
                                     <Route path="contracts/new" element={<NewEditContract />} />
+                                    <Route path="contracts/:contract_id" element={<Contract />} />
                                     {/* <Route path="products/new" element={<NewEditProduct />} />
                                     <Route path="productslist" element={<ProductList />} />
                                     <Route path="orderslist" element={<OrdersList />} />

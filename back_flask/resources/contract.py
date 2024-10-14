@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse, request
 from math import ceil
+from sqlalchemy import desc
 from models.contract import ContractModel
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
@@ -20,7 +21,18 @@ class Contracts(Resource):
         total_pages = ceil(total_contracts / per_page)
 
 
-        return {'contracts':  [contract.json() for contract in ContractModel.query.offset(offset).limit(per_page).all()], 'page': page, 'per_page': per_page, 'total_pages': total_pages}
+        contracts = (ContractModel.query
+                    .order_by(desc(ContractModel.created_at)) 
+                    .offset(offset)
+                    .limit(per_page)
+                    .all())
+
+        return {
+            'contracts': [contract.json() for contract in contracts],
+            'page': page,
+            'per_page': per_page,
+            'total_pages': total_pages
+        }
 
     
 

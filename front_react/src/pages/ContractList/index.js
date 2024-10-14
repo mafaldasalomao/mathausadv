@@ -110,7 +110,7 @@ const ContractList = () => {
                     <IconButton aria-label="delete" style={{ color: 'var(--dark-orange)' }}>
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="view" style={{ color: 'var(--orange)' }}>
+                    <IconButton aria-label="view" style={{ color: 'var(--orange)' }} onClick={() => navigate(`/user/contracts/${contract.contract_id}`)}>
                       <VisibilityIcon />
                     </IconButton>
                   </TableCell>
