@@ -14,7 +14,7 @@ class Contracts(Resource):
         per_page = request.args.get('per_page', 10, type=int)
         offset = (page - 1) * per_page
 
-        total_contracts = ContractModel.query.all().count()
+        total_contracts = ContractModel.query.count()
 
         # Calcular o total de páginas
         total_pages = ceil(total_contracts / per_page)

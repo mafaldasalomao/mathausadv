@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Typography, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './styles.css'; // Importa as cores personalizadas
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const ContractList = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const apiPrivate = useAxiosPrivate();
+  const [contracts, setContracts] = useState([]);
   // Filtra os contratos com base no termo de busca
   const navigate = useNavigate();
-  const contracts = [
+
+  
+  useEffect(() => {
+    const fetchContracts = async () => {
+      try {
+        const response = await apiPrivate.get('/contracts');
+        setContracts(response.data.contracts);
+      } catch (error) {
+        console.error('Erro ao buscar os contratos:', error);
+      }
+    };
+    fetchContracts();
+  }, []);
+
+  const contracts_ = [
     { name: 'Contrato A', description: 'Descrição do contrato A', createdAt: '2024-10-10' },
     { name: 'Contrato B', description: 'Descrição do contrato B', createdAt: '2024-10-11' },
     { name: 'Contrato C', description: 'Descrição do contrato C', createdAt: '2024-10-12' },
   ];
-  const filteredContracts = contracts.filter(
-    (contract) =>
-      contract.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      contract.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredContracts = contracts.filter(
+  //   (contract) =>
+  //     contract.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     contract.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   const handleCreateContract = () => {
     // Lógica para criar um novo contrato
@@ -64,11 +81,11 @@ const ContractList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredContracts.map((contract, index) => (
+            {contracts.map((contract, index) => (
               <TableRow key={index}>
                 <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.name}</TableCell>
                 <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.description}</TableCell>
-                <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.createdAt}</TableCell>
+                <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.created_at}</TableCell>
                 <TableCell>
                   <IconButton aria-label="edit" style={{ color: 'var(--orange)' }}>
                     <EditIcon />

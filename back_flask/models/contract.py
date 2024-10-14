@@ -24,8 +24,8 @@ class ContractModel(db.Model):
             'name': self.name,
             'description': self.description,
             'drive_folder_id': self.drive_folder_id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat(),
+            'created_at': self.created_at.strftime('%d/%m/%Y'),
+            'updated_at': self.updated_at.strftime('%d/%m/%Y'),
             'clients':  [client.json() for client in self.clients],
             'documents':  [document.json() for document in self.documents]
         }
