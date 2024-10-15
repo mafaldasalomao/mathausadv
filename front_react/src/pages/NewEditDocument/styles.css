@@ -34,28 +34,6 @@
     border-color: var(--dark-orange);
 }
 
-.dialog-title {
-    background-color: var(--deep-black);
-    color: var(--orange);
-}
-
-.dialog-content {
-    background-color: var(--deep-black);
-}
-
-.dialog-actions {
-    background-color: var(--deep-black);
-}
-
-.input-field {
-    margin-bottom: 16px;
-    input {
-        color: white;
-    }
-    label {
-        color: white;
-    }
-}
 
 .button-generate {
     background-color: var(--orange);

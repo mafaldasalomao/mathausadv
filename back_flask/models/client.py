@@ -5,7 +5,7 @@ class ClientModel(db.Model):
 
     client_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
-    cpf = db.Column(db.String(150))
+    cpf_cnpj = db.Column(db.String(150))
     address = db.Column(db.String(150))
     email = db.Column(db.String(150))
     phone = db.Column(db.String(150))
@@ -14,9 +14,9 @@ class ClientModel(db.Model):
 
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
     
-    def __init__(self, name, cpf, address, email, phone, signer_type, contract_id):
+    def __init__(self, name, cpf_cnpj, address, email, phone, signer_type, contract_id):
         self.name = name
-        self.cpf = cpf
+        self.cpf_cnpj = cpf_cnpj
         self.address = address
         self.email = email
         self.phone = phone
@@ -27,7 +27,7 @@ class ClientModel(db.Model):
         return {
             'client_id': self.client_id,
             'name': self.name,
-            'cpf': self.cpf,
+            'cpf_cnpj': self.cpf_cnpj,
             'address': self.address,
             'email': self.email,
             'phone': self.phone,
@@ -50,9 +50,9 @@ class ClientModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update_client(self, name, cpf, address, email, phone, signer_type, contract_id):
+    def update_client(self, name, cpf_cnpj, address, email, phone, signer_type, contract_id):
         self.name = name
-        self.cpf = cpf
+        self.cpf_cnpj = cpf_cnpj
         self.address = address
         self.email = email
         self.phone = phone

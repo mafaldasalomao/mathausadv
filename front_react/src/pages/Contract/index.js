@@ -15,9 +15,11 @@ import {
     DialogContent,
     TextField,
     DialogActions,
-    Checkbox,
-    FormControlLabel,
     Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem 
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -25,7 +27,7 @@ import './styles.css';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Contract = () => {
-    const { id } = useParams(); // Obtém o ID do contrato da URL
+    const { contract_id } = useParams(); 
     const navigate = useNavigate();
     const apiPrivate = useAxiosPrivate();
     
@@ -33,22 +35,22 @@ const Contract = () => {
     const [parts, setParts] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [open, setOpen] = useState(false); // Estado do modal
+    const [open, setOpen] = useState(false); 
     const [novoContratante, setNovoContratante] = useState({
-        nome: '',
-        cpf: '',
+        name: '',
+        cpf_cnpj: '',
         email: '',
-        telefone: '',
-        responsavel: false
+        phone: '',
+        address: '',
+        responsavel: ''
     });
 
-    // Função para buscar os detalhes do contrato na API
     const fetchContractDetails = async () => {
         try {
-            const response = await apiPrivate.get(`/contract/1`); // Substitua pela sua URL de API
+            const response = await apiPrivate.get(`/contract/${contract_id}`); 
             setContract(response.data);
-            setParts(response.data.parts || []); // Supondo que a API retorne uma lista de partes
-            setDocuments(response.data.documents || []); // Supondo que a API retorne uma lista de documentos
+            setParts(response.data.clients || []); 
+            setDocuments(response.data.documents || []); 
             setIsLoading(false);
         } catch (error) {
             console.error('Erro ao buscar os detalhes do contrato:', error);
@@ -57,52 +59,70 @@ const Contract = () => {
     };
 
     const handleAddPart = () => {
-        setOpen(true); // Abre o modal
+        setOpen(true); 
     };
+
     const handleCloseModal = () => {
         setOpen(false);
-        setNovoContratante({ // Reseta os campos do novo contratante
-            nome: '',
-            cpf: '',
+        setNovoContratante({
+            name: '',
+            cpf_cnpj: '',
             email: '',
-            telefone: '',
-            responsavel: false,
+            phone: '',
+            address: '',
+            signer_type: '',
         });
     };
 
     useEffect(() => {
         fetchContractDetails();
-    }, [id]);
+    }, [contract_id]);
+
     const handleNovoContratanteChange = (event) => {
-        const { name, value, type, checked } = event.target;
+        const { name, value } = event.target;
         setNovoContratante((prev) => ({
             ...prev,
-            [name]: type === 'checkbox' ? checked : value,
+            [name]: value,
         }));
     };
+
     const handleUploadDocument = () => {
-        // Lógica para enviar um novo documento
         console.log('Enviar novo documento');
-        // Por exemplo, redirecionar para uma página ou abrir um modal
+    };
+
+    const areFieldsFilled = () => {
+        return (
+            novoContratante.name &&
+            novoContratante.cpf_cnpj &&
+            novoContratante.email &&
+            novoContratante.phone &&
+            novoContratante.address &&
+            novoContratante.signer_type
+        );
     };
 
     const addContratante = () => {
-        // Lógica para adicionar o novo contratante
-        console.log('Adicionar novo contratante:', novoContratante);
-        // Aqui você pode fazer a chamada para a API para adicionar a parte
-        // Após adicionar, você pode fechar o modal e atualizar a lista de partes
-        setParts((prev) => [...prev, novoContratante]); // Exemplo de atualização local
-        handleCloseModal(); // Fecha o modal
+        if (!areFieldsFilled()) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+        try {
+            apiPrivate.post(`/contract/${contract_id}/parts`, novoContratante);
+        } catch (error) {
+            console.error('Erro ao adicionar novo contratante:', error);
+        }
+        setParts((prev) => [...prev, novoContratante]); 
+        handleCloseModal(); 
     };
     
     if (isLoading) {
-        return <CircularProgress style={{ display: 'block', margin: 'auto', marginTop: '20px' }} />; // Exibe um carregando
+        return <CircularProgress style={{ display: 'block', margin: 'auto', marginTop: '20px' }} />;
     }
 
     return (
         <div style={{ padding: '16px' }}>
             <Typography variant="h4" style={{ color: 'var(--orange)', marginBottom: '16px' }}>
-                {contract.name} - {new Date(contract.created_at).toLocaleDateString('pt-BR')}
+                {contract.name} - {contract.created_at}
             </Typography>
 
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
@@ -112,8 +132,19 @@ const Contract = () => {
                 {parts.length > 0 ? (
                     parts.map((part, index) => (
                         <ListItem key={index}>
-                            <ListItemText primary={part.name} />
+                            <ListItemText
+                                primary={<>{part.name} - {part.signer_type}</>}
+                                secondary={
+                                    <>
+                                        <div>CPF: {part.cpf_cnpj}</div>
+                                        <div>Email: {part.email}</div>
+                                        <div>Telefone: {part.phone}</div>
+                                        <div>Endereço: {part.address}</div>
+                                    </>
+                                }
+                            />
                             <ListItemSecondaryAction>
+                                {/* Aqui você pode adicionar botões adicionais, se necessário */}
                             </ListItemSecondaryAction>
                         </ListItem>
                     ))
@@ -141,6 +172,7 @@ const Contract = () => {
                         <ListItem key={index}>
                             <ListItemText primary={document.name} />
                             <ListItemSecondaryAction>
+                                {/* Aqui você pode adicionar botões adicionais, se necessário */}
                             </ListItemSecondaryAction>
                         </ListItem>
                     ))
@@ -158,7 +190,7 @@ const Contract = () => {
                     </Button>
                 </ListItem>
             </List>
-            {/* Modal para Adicionar Nova Parte */}
+
             <Dialog open={open} onClose={handleCloseModal} maxWidth="lg" fullWidth>
                 <DialogTitle className="dialog-title">Adicionar Novo Contratante</DialogTitle>
                 <DialogContent className="dialog-content">
@@ -166,17 +198,17 @@ const Contract = () => {
                         <TextField
                             mb={2}
                             label="Nome"
-                            name="nome"
-                            value={novoContratante.nome}
+                            name="name"
+                            value={novoContratante.name}
                             onChange={handleNovoContratanteChange}
                             fullWidth
                         />
                     </Box>
                     <Box mb={2}>
                         <TextField
-                            label="CPF"
-                            name="cpf"
-                            value={novoContratante.cpf}
+                            label="CPF/CNPJ"
+                            name="cpf_cnpj"
+                            value={novoContratante.cpf_cnpj}
                             onChange={handleNovoContratanteChange}
                             fullWidth
                         />
@@ -193,23 +225,36 @@ const Contract = () => {
                     <Box mb={2}>
                         <TextField
                             label="Telefone"
-                            name="telefone"
-                            value={novoContratante.telefone}
+                            name="phone"
+                            value={novoContratante.phone}
                             onChange={handleNovoContratanteChange}
                             fullWidth
                         />
                     </Box>
                     <Box mb={2}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={novoContratante.responsavel}
-                                    onChange={handleNovoContratanteChange}
-                                    name="responsavel"
-                                />
-                            }
-                            label="Responsável legal"
+                        <TextField
+                            label="Endereço"
+                            name="address"
+                            value={novoContratante.address}
+                            onChange={handleNovoContratanteChange}
+                            fullWidth
+                            multiline
+                            rows={4}
                         />
+                    </Box>
+                    <Box mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="responsavel-label">Tipo</InputLabel>
+                            <Select
+                                labelId="responsavel-label"
+                                value={novoContratante.signer_type}
+                                onChange={handleNovoContratanteChange}
+                                name="responsavel"
+                            >
+                                <MenuItem value="contratante">Contratante</MenuItem>
+                                <MenuItem value="responsavel">Responsável</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions className="dialog-actions">

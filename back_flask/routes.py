@@ -18,5 +18,5 @@ def create_routes(api):
     api.add_resource(Document, '/api/v1/user/document/<int:document_id>')
 
     api.add_resource(Client, '/api/v1/user/client/<int:client_id>')
-    api.add_resource(Clients, '/api/v1/user/clients')
+    api.add_resource(Clients, '/api/v1/user/<int:contract_id>/clients')
 
