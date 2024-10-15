@@ -1,0 +1,12 @@
+.button-add {
+    margin-bottom: 16px;
+    color: var(--dark-orange) !important;
+    border-color: var(--dark-orange) !important;
+    display: flex;
+}
+
+.button-generate {
+    background-color: var(--orange) !important;
+    color: white !important;
+}
+
