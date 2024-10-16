@@ -13,10 +13,11 @@
 .dialog-title {
     /* background-color: var(--deep-black); */
     color: var(--orange);
+    /* margin-bottom: 36px !important; */
 }
 
 /* .dialog-content {
-    background-color: var(--deep-black);
+    margin: 40px !important;
 } */
 
 /* .dialog-actions {
@@ -24,11 +25,11 @@
 } */
 
 .input-field {
-    margin-bottom: 16px;
+    margin-top: 8px !important;
     input {
-        color: white;
+        color: rgb(0, 0, 0);
     }
     label {
-        color: white;
+        color: rgb(117, 116, 116);
     }
 }

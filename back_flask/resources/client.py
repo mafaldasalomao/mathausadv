@@ -69,7 +69,7 @@ class Client(Resource):
 
 
     def get(self, client_id):
-        client = ClientModel.find_contract(client_id)
+        client = ClientModel.find_client(client_id)
         if client:
             return client.json()
         return {'message': 'Client not found'}, 404
@@ -77,10 +77,11 @@ class Client(Resource):
 
     @jwt_required()
     def delete(self, client_id):
-        client = ClientModel.find_document(client_id)
+        client = ClientModel.find_client(client_id)
         if client:
-            if client.delete_client():
+            try:
+                client.delete_client()
                 return {'message': 'Client deleted'}
-            else:
+            except:
                 return {'message': 'Cannot delete client'}, 400
         return {'message': 'Client not found'}, 404

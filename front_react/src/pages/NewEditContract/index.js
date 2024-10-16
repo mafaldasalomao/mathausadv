@@ -21,7 +21,8 @@ const NewEditContract = () => {
   // Estado para os dados do documento
   const [contract, setContract] = useState({
     name: '',
-    description: ''
+    description: '',
+    status: 'CONTRATAÇÃO'
   });
 
 

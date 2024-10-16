@@ -8,15 +8,17 @@ class ContractModel(db.Model):
     name = db.Column(db.String(80))
     description = db.Column(db.String(80), nullable=True)
     drive_folder_id = db.Column(db.String(80))
+    status = db.Column(db.String(80), default='CONTRATAÇÃO')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     clients = db.relationship('ClientModel')
     documents = db.relationship('DocumentModel')
 
-    def __init__(self, name, description, drive_folder_id):
+    def __init__(self, name, description, drive_folder_id, status):
         self.name = name
         self.description = description
         self.drive_folder_id = drive_folder_id
+        self.status = status
 
     def json(self):
         document_json = {
@@ -24,6 +26,7 @@ class ContractModel(db.Model):
             'name': self.name,
             'description': self.description,
             'drive_folder_id': self.drive_folder_id,
+            'status': self.status,
             'created_at': self.created_at.strftime('%d/%m/%Y'),
             'updated_at': self.updated_at.strftime('%d/%m/%Y'),
             'clients':  [client.json() for client in self.clients],

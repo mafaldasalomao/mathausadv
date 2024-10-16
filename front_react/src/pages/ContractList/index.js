@@ -25,7 +25,7 @@ const ContractList = () => {
     const fetchContracts = async () => {
       try {
         setIsLoading(true);
-        const response = await apiPrivate.get(`/contracts?page=${page}&per_page=2`);
+        const response = await apiPrivate.get(`/contracts?page=${page}&per_page=10`);
         setContracts(response.data.contracts);
         setTotalPages(response.data.total_pages);
         setIsLoading(false);
@@ -50,7 +50,42 @@ const ContractList = () => {
     // Lógica para criar um novo contrato
     navigate('/user/contracts/new');
   };
-
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'CONTRATAÇÃO':
+        return '📝'; // Ícone de documento
+      case 'PRÉ-EXECUÇÃO':
+        return '✍️'; // Ícone de assinatura
+      case 'EXECUÇÃO DO SERVIÇO':
+        return '⚙️'; // Ícone de engrenagem
+      case 'ADITIVO':
+        return '🔄'; // Ícone de alteração
+      case 'REVISÃO CONTRATUAL':
+        return '⚠️'; // Ícone de alerta
+      case 'ENCERRAMENTO':
+        return '✔️'; // Ícone de check
+      default:
+        return '❓'; // Ícone padrão para desconhecido
+    }
+  };
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'CONTRATAÇÃO':
+        return '#D97C2B'; // Laranja
+      case 'PRÉ-EXECUÇÃO':
+        return '#4A90E2'; // Azul Claro
+      case 'EXECUÇÃO DO SERVIÇO':
+        return '#4CAF50'; // Verde
+      case 'ADITIVO':
+        return '#f3a600'; // Amarelo
+      case 'REVISÃO CONTRATUAL':
+        return '#F44336'; // Vermelho
+      case 'ENCERRAMENTO':
+        return '#9E9E9E'; // Cinza
+      default:
+        return 'var(--dark-brown)'; // Cor padrão
+    }
+  };
   return (
     <div>
       <Typography variant="h4" style={{ color: 'var(--orange)', marginBottom: '16px' }}>
@@ -87,6 +122,7 @@ const ContractList = () => {
               <TableCell style={{ color: 'var(--orange)', fontWeight: 'bold' }}>Nome</TableCell>
               <TableCell style={{ color: 'var(--orange)', fontWeight: 'bold' }}>Descrição</TableCell>
               <TableCell style={{ color: 'var(--orange)', fontWeight: 'bold' }}>Data de Criação</TableCell>
+              <TableCell style={{ color: 'var(--orange)', fontWeight: 'bold' }}>Status</TableCell>
               <TableCell style={{ color: 'var(--orange)', fontWeight: 'bold' }}>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -103,6 +139,9 @@ const ContractList = () => {
                   <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.name}</TableCell>
                   <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.description}</TableCell>
                   <TableCell style={{ color: 'var(--dark-brown)' }}>{contract.created_at}</TableCell>
+                  <TableCell style={{ color: getStatusColor(contract.status) }}>
+                    {getStatusIcon(contract.status)} {contract.status}
+                  </TableCell>
                   <TableCell>
                     <IconButton aria-label="edit" style={{ color: 'var(--orange)' }}>
                       <EditIcon />

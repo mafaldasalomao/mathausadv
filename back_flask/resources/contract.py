@@ -57,6 +57,7 @@ class Contract(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str, required=True, help="The field 'name' cannot be left blank")
     parser.add_argument('description', type=str, required=True, help="The field 'description' cannot be left blank")
+    parser.add_argument('status', type=str, required=True, help="The field 'status' cannot be left blank")
    
 
 

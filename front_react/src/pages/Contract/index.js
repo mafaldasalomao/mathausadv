@@ -19,38 +19,40 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem 
+    MenuItem
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Divider } from '@mui/material'
 import './styles.css';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-
+import Swal from 'sweetalert2';
 const Contract = () => {
-    const { contract_id } = useParams(); 
+    const { contract_id } = useParams();
     const navigate = useNavigate();
     const apiPrivate = useAxiosPrivate();
-    
+
     const [contract, setContract] = useState(null);
     const [parts, setParts] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [open, setOpen] = useState(false); 
+    const [open, setOpen] = useState(false);
     const [novoContratante, setNovoContratante] = useState({
         name: '',
         cpf_cnpj: '',
         email: '',
         phone: '',
         address: '',
-        responsavel: ''
+        signer_type: ''
     });
 
     const fetchContractDetails = async () => {
         try {
-            const response = await apiPrivate.get(`/contract/${contract_id}`); 
+            const response = await apiPrivate.get(`/contract/${contract_id}`);
             setContract(response.data);
-            setParts(response.data.clients || []); 
-            setDocuments(response.data.documents || []); 
+            setParts(response.data.clients || []);
+            setDocuments(response.data.documents || []);
             setIsLoading(false);
         } catch (error) {
             console.error('Erro ao buscar os detalhes do contrato:', error);
@@ -59,7 +61,7 @@ const Contract = () => {
     };
 
     const handleAddPart = () => {
-        setOpen(true); 
+        setOpen(true);
     };
 
     const handleCloseModal = () => {
@@ -107,14 +109,72 @@ const Contract = () => {
             return;
         }
         try {
-            apiPrivate.post(`/contract/${contract_id}/parts`, novoContratante);
+            Swal.fire({
+                title: 'Aguarde...',
+                text: 'Estamos criando adicionando o contratante.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading(); // Mostra o indicador de loading
+                }
+            });
+            apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
+            setParts((prev) => [...prev, novoContratante]);
+            Swal.close();
         } catch (error) {
-            console.error('Erro ao adicionar novo contratante:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ocorreu um erro ao adicionar o contratante.',
+            })
+            Swal.close();
         }
-        setParts((prev) => [...prev, novoContratante]); 
-        handleCloseModal(); 
+
+        handleCloseModal();
     };
-    
+
+    const handleDeletePart = async (clientId) => {
+        try {
+            Swal.fire({
+                title: 'Deseja deletar este contratante?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--orange)',
+                cancelButtonColor: 'var(--deep-black)',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const response = await apiPrivate.delete(`/client/${clientId}`);
+                    if (response.status === 200) {
+                        Swal.fire({
+                            title: 'Contratante excluído com sucesso!',
+                            icon: 'success',
+                            confirmButtonColor: 'var(--orange)',
+                            confirmButtonText: 'OK'
+                        });
+                        fetchContractDetails();
+                    } else {
+                        Swal.fire({
+                            title: 'Ocorreu um erro ao excluir o contratante.',
+                            icon: 'error',
+                            confirmButtonColor: 'var(--orange)',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            }) .catch((error) => {
+                Swal.fire({
+                    title: 'Ocorreu um erro ao excluir o contratante.',
+                    icon: 'error',
+                    confirmButtonColor: 'var(--orange)',
+                    confirmButtonText: 'OK'
+                })
+            })
+        } catch (error) {
+            console.error('Erro ao excluir o contratante:', error);
+        }
+    };
+
     if (isLoading) {
         return <CircularProgress style={{ display: 'block', margin: 'auto', marginTop: '20px' }} />;
     }
@@ -131,6 +191,7 @@ const Contract = () => {
             <List component={Paper} style={{ marginBottom: '24px' }}>
                 {parts.length > 0 ? (
                     parts.map((part, index) => (
+                        <div>
                         <ListItem key={index}>
                             <ListItemText
                                 primary={<>{part.name} - {part.signer_type}</>}
@@ -143,10 +204,19 @@ const Contract = () => {
                                     </>
                                 }
                             />
+
                             <ListItemSecondaryAction>
-                                {/* Aqui você pode adicionar botões adicionais, se necessário */}
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() => handleDeletePart(part.client_id)}
+                                >
+                                    <DeleteIcon />
+                                </Button>
                             </ListItemSecondaryAction>
                         </ListItem>
+                        {index < parts.length - 1 && <Divider />}
+                        </div>
                     ))
                 ) : (
                     <Typography variant="body2" style={{ padding: '16px' }}>Nenhuma parte cadastrada.</Typography>
@@ -180,7 +250,8 @@ const Contract = () => {
                     <Typography variant="body2" style={{ padding: '16px' }}>Nenhum documento cadastrado.</Typography>
                 )}
                 <ListItem>
-                    <Button
+                    {parts.length > 0 && (
+                        <Button
                         variant="outlined"
                         startIcon={<CloudUploadIcon />}
                         onClick={handleUploadDocument}
@@ -188,6 +259,8 @@ const Contract = () => {
                     >
                         Enviar Novo Documento
                     </Button>
+                    )}
+                    
                 </ListItem>
             </List>
 
@@ -199,6 +272,7 @@ const Contract = () => {
                             mb={2}
                             label="Nome"
                             name="name"
+                            className='input-field'
                             value={novoContratante.name}
                             onChange={handleNovoContratanteChange}
                             fullWidth
@@ -208,6 +282,7 @@ const Contract = () => {
                         <TextField
                             label="CPF/CNPJ"
                             name="cpf_cnpj"
+                            className='input-field'
                             value={novoContratante.cpf_cnpj}
                             onChange={handleNovoContratanteChange}
                             fullWidth
@@ -217,6 +292,7 @@ const Contract = () => {
                         <TextField
                             label="Email"
                             name="email"
+                            className='input-field'
                             value={novoContratante.email}
                             onChange={handleNovoContratanteChange}
                             fullWidth
@@ -226,6 +302,7 @@ const Contract = () => {
                         <TextField
                             label="Telefone"
                             name="phone"
+                            className='input-field'
                             value={novoContratante.phone}
                             onChange={handleNovoContratanteChange}
                             fullWidth
@@ -235,6 +312,7 @@ const Contract = () => {
                         <TextField
                             label="Endereço"
                             name="address"
+                            className='input-field'
                             value={novoContratante.address}
                             onChange={handleNovoContratanteChange}
                             fullWidth
@@ -243,16 +321,17 @@ const Contract = () => {
                         />
                     </Box>
                     <Box mb={2}>
-                        <FormControl fullWidth>
-                            <InputLabel id="responsavel-label">Tipo</InputLabel>
+                        <FormControl  fullWidth>
+                            <InputLabel id="signer_type-label">Tipo</InputLabel>
                             <Select
-                                labelId="responsavel-label"
+                                labelId="signer_type-label"
+                                className='input-field'
                                 value={novoContratante.signer_type}
                                 onChange={handleNovoContratanteChange}
-                                name="responsavel"
+                                name="signer_type"
                             >
-                                <MenuItem value="contratante">Contratante</MenuItem>
-                                <MenuItem value="responsavel">Responsável</MenuItem>
+                                <MenuItem value="Contratante">Contratante</MenuItem>
+                                <MenuItem value="Responsável">Responsável</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
