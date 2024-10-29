@@ -1,4 +1,4 @@
-from generate_doc import cadastrar_signatarios, generate_document, preprocess_data, send_document, send_document_to_signer
+from generate_doc import cadastrar_signatarios, generate_contract, preprocess_data, send_document, send_document_to_signer
 
 contratantes = [
     {
@@ -28,21 +28,21 @@ responsaveis = [
 
 
 # Caminhos do template e do arquivo de saída
-template_path = "CPSJ-PARTESEMREPRESENTANTE V1.1.docx"  # Template já existente com placeholders
+template_path = "CONTRATO.docx"  # Template já existente com placeholders
 
 # Gera o documento substituindo as variáveis no template
 context = preprocess_data(contratantes, responsaveis, "teste servocçççç ", "honorarios iodaodwkadawodawdada")
 print(context)
-pdf_path = generate_document(template_path, context)
+pdf_path = generate_contract(template_path, context)
 print(pdf_path)
-document_id = send_document(pdf_path) #7d09a61b-3fff-4e22-9dc6-1e1559f8c91f
-print(document_id)
-cadastrar_signatarios(contratantes, document_id=document_id)
-response = send_document_to_signer(
-        document_id=document_id,
-        skip_email="false",
-        workflow="processo_assinatura",
-        message="Por favor, assine este documento."
-)
+# document_id = send_document(pdf_path) #7d09a61b-3fff-4e22-9dc6-1e1559f8c91f
+# print(document_id)
+# cadastrar_signatarios(contratantes, document_id=document_id)
+# response = send_document_to_signer(
+#         document_id=document_id,
+#         skip_email="false",
+#         workflow="processo_assinatura",
+#         message="Por favor, assine este documento."
+# )
 
-print(response)  
+# print(response)  

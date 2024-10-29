@@ -45,7 +45,7 @@ def preprocess_data(contratantes, responsaveis, service, fees):
     return context
 
 
-def generate_document(template_path, context):
+def generate_contract(template_path, context):
     os.makedirs(TEMP_FOLDER, exist_ok=True)
     doc = Document(template_path)
     non_representatives = [person for person in context['clients'] if not person['representative']]
@@ -97,7 +97,7 @@ def generate_document(template_path, context):
             paragraph.clear()
             
             for index, person in enumerate(non_representatives):
-                title_run = paragraph.add_run(f"_____________________________________________________\n{person['name']}\n\n")
+                title_run = paragraph.add_run(f"__________________________________\n{person['name']}\n{person['title']}\n\n")
                 title_run.font.name = "Urbanist"
                 title_run.font.size = Pt(10)
                 break_line = math.ceil((len(non_representatives)/2))            
@@ -124,7 +124,7 @@ def generate_document(template_path, context):
 
     # Salve o novo documento
     timestamp_unix = int(time.time())
-    output_docx =f'temp_files/documento-{timestamp_unix}.docx'
+    output_docx =f'temp_files/contrato.docx'
     doc.save(output_docx)
     convert(output_docx, output_docx.replace('.docx', '.pdf'))
     return output_docx.replace('.docx', '.pdf')
