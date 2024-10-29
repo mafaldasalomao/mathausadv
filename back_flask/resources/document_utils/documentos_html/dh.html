@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Declaração de Hipossuficiência</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: "Urbanist", sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: left;
+            font-size: 18px;
+            /* text-transform: uppercase;
+            
+            margin-bottom: 20px; */
+        }
+        li {
+            text-align: justify;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        p {
+            text-align: justify;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+        .signature {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .signature p {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+        .signature .signature-img {
+            display: block;
+            max-width: 150px;
+            margin-bottom: -60px;
+            margin: 0 auto;
+        }
+        .signature .line {
+            margin-top: 63px;
+            text-align: center;
+            border-bottom: 1px solid #000;
+        }
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            
+        }
+        .signatures div {
+            text-align: center;
+        }
+        .signature p {
+            margin-top: 5px;
+        }
+
+        /* Seção do cabeçalho com logo e informações */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .header .logo img {
+            max-width: 250px; /* Tamanho da logo */
+        }
+        .header .info {
+            text-align: right;
+        }
+        .header .info p {
+            margin: 5px 0;
+            text-align: right;
+        }
+        /* Seção de duas colunas */
+        .two-columns {
+            display: flex;
+            justify-content: space-between;
+        }
+        .two-columns section {
+            width: 48%; /* Cada coluna ocupa cerca de metade da largura */
+            padding: 10px;
+            text-align: justify;
+            /* box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); */
+            /* border-radius: 5px; */
+        }
+        .page-break {
+            page-break-before: always; /* Força uma nova página antes do elemento */
+        }
+
+        .page-break-after {
+            page-break-after: always; /* Força uma nova página após o elemento */
+            border-bottom: 2px dashed green ; /* Linha visível na tela */
+        }
+
+        @media print {
+            .page-break-after {
+                border-bottom: none; /* Remove a linha na impressão */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <!-- Substitua o src pela URL da sua logo -->
+                <img src="Logo2.png" alt="Logo do Escritório">
+            </div>
+            <div class="info">
+                <p style="font-size: 14pt; margin-bottom: 20px;"><strong>DECLARAÇÃO DE HIPOSSUFICIÊNCIA</strong></p>
+                <p><strong>Folha proposta</strong></p>
+                <p><strong>Tipo:</strong> Avulso</p>
+                <p><strong>Origem:</strong> Sede</p>
+                <p>Data: 24/10/2024</p>
+            </div>
+        </header>
+        <hr/>
+        <div class="two-columns">
+            <section>
+                <p style="font-size: 12pt; margin-bottom: -10px;">Declarante</p>
+                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
+                <p><strong>Guilherme Gomes de Sousa</strong></p>
+                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
+            </section>
+
+            <section>
+                <p style="font-size: 12pt; margin-bottom: -10px;">Representante</p>
+                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
+                <p><strong>Lúcia Maria Gomes Ferreira</strong></p>
+                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
+            </section>
+        </div>
+        <hr/>
+        <section>
+            <p>Declaro, para os devidos fins, não ter condições de arcar com as custas e despesas processuais sem incorrer em prejuízo próprio ou de minha família, sendo pobre na acepção jurídica. 
+            </p>
+            <P>Assim o faço nos termos da L1060/50 2º parágrafo único, L7115/83 10, L13105/15 98 e CF 5º LXXIV, para que produza seus jurídicos e legais efeitos, sob as penas da lei.
+            </P>
+        </section>
+
+        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
+        <div class="two-columns">
+            <section class="signature">
+                <div class="line"></div> <!-- Linha visual para a assinatura -->
+                <p>Assin. Guilherme Gomes de Sousa</p>
+                
+            </section>
+        </div>
+       
+
+        <footer>
+            <!-- <p class="highlight">V.1.0 – 19/03/2024</p> -->
+        </footer>
+    </div>
+</body>
+</html>

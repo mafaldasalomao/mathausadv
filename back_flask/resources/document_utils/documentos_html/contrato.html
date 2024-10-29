@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procuração</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: "Urbanist", sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: left;
+            font-size: 18px;
+            /* text-transform: uppercase;
+            
+            margin-bottom: 20px; */
+        }
+        li {
+            text-align: justify;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        p {
+            text-align: justify;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .highlight {
+            font-weight: bold;
+        }
+        .signature {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .signature p {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+        .signature .signature-img {
+            display: block;
+            max-width: 150px;
+            margin-bottom: -60px;
+            margin: 0 auto;
+        }
+        .signature .line {
+            margin-top: 63px;
+            text-align: center;
+            border-bottom: 1px solid #000;
+        }
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            
+        }
+        .signatures div {
+            text-align: center;
+        }
+        .signature p {
+            margin-top: 5px;
+        }
+
+        /* Seção do cabeçalho com logo e informações */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .header .logo img {
+            max-width: 250px; /* Tamanho da logo */
+        }
+        .header .info {
+            text-align: right;
+        }
+        .header .info p {
+            margin: 5px 0;
+            text-align: right;
+        }
+        /* Seção de duas colunas */
+        .two-columns {
+            display: flex;
+            justify-content: space-between;
+        }
+        .two-columns section {
+            width: 48%; /* Cada coluna ocupa cerca de metade da largura */
+            padding: 10px;
+            text-align: justify;
+            /* box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); */
+            /* border-radius: 5px; */
+        }
+        .page-break {
+            page-break-before: always; /* Força uma nova página antes do elemento */
+        }
+
+        .page-break-after {
+            page-break-after: always; /* Força uma nova página após o elemento */
+            border-bottom: 2px dashed green ; /* Linha visível na tela */
+        }
+
+        @media print {
+            .page-break-after {
+                border-bottom: none; /* Remove a linha na impressão */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <!-- Substitua o src pela URL da sua logo -->
+                <img src="Logo2.png" alt="Logo do Escritório">
+            </div>
+            <div class="info">
+                <p style="font-size: 14pt; margin-bottom: 20px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS JURÍDICOS</strong></p>
+                <p><strong>Folha proposta</strong></p>
+                <p><strong>Tipo:</strong> Avulso</p>
+                <p><strong>Origem:</strong> Sede</p>
+                <p>Data: 24/10/2024</p>
+            </div>
+        </header>
+        <hr/>
+
+        <h2>1 – Dados dos Contratantes</h2>
+        <div class="two-columns">
+            <section>
+                <p style="font-size: 12pt; margin-bottom: -10px;">Outorgante</p>
+                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
+                <p><strong>Guilherme Gomes de Sousa</strong></p>
+                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
+            </section>
+
+            <section>
+                <p style="font-size: 12pt; margin-bottom: -10px;">Representante</p>
+                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
+                <p><strong>Lúcia Maria Gomes Ferreira</strong></p>
+                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
+            </section>
+        </div>
+        <hr/>
+        <section>
+            <h2>2 – Serviço(s)</h2>
+            <p>O serviço a ser prestado é a defesa judicial na área cível, conforme descrito na proposta de prestação de serviços jurídicos.</p>
+        </section>
+
+        <section>
+            <h2>3 – Honorários</h2>
+            <p>Pelos serviços prestados e especificados, os honorários fixados são de R$ 5.000,00, conforme acordado, divididos em duas parcelas.</p>
+        </section>
+
+        <section>
+            <h2>4 – Contato</h2>
+            <p>Contratante: João Silva - Email: joao@exemplo.com - Telefone: (68) 99999-9999</p>
+        </section>
+        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
+        <div class="two-columns">
+            <section class="signature">
+                <div class="line"></div> <!-- Linha visual para a assinatura -->
+                <p> Assin.Daniel Mathaus Costa de Macêdo</p>
+                <p>Contratante 1</p>
+            </section>
+            <section class="signature">
+                <img src="signature_daniel.png" alt="Assinatura" class="signature-img">
+                <div class="line" style="margin-top: -10px;"></div> <!-- Linha visual para a assinatura -->
+                <p>Daniel Mathaus Costa de Macêdo</p>
+                <p>OAB/AC 4.355</p>
+            </section>
+            
+        </div>
+       
+
+        
+
+
+        <div class="page-break-after"></div>
+
+
+        <section>
+            <p>Pelo presente Contrato de Prestação de Serviço de Natureza Jurídica ("Contrato"), o escritório Mathaus Advogados Associados ("Contratado"), com sede na Rua W8, 11, Tucumã, CEP 69.919-724, Rio Branco – AC, e o(s) contratante(s) nomeado(s) e qualificado(s) na Proposta de Prestação de Serviços Jurídicos ("Proposta"), que integra este Contrato para todos os fins e efeitos de direito, têm justo e acertado os itens e condições conforme seguem.</p>
+        </section>
+
+        <div class="two-columns">
+            <section>
+                <h2>1. Serviços</h2>
+                <p> 1.1 O Contratado se obriga, em cumprimento do mandato judicial recebido - na defesa dos direitos e interesses do contratante, praticando, com zelo e atividade o que for necessário judicial ou extrajudicialmente -, a prestar serviços indicados no Item 2 da Proposta.</p>
+                <p>1.2 O Contratante faculta ao Contratado o exame da oportunidade e conveniência da opção pela formação de litisconsórcio quando do ajuizamento de qualquer ação relacionada ao presente Contrato ou na defesa de seus interesses.</p>
+                <p>1.3 A interposição de recurso à(s) instância(s) superior(es), ou ao próprio tribunal, ficará a critério único e exclusivo dos advogados do Contratado, que irão avaliar, na data oportuna, a possibilidade de êxito da ação.</p>
+                <h2>2. Honorários</h2>
+                <p>2.1 Pelos serviços prestados e especificados na Proposta o Contratado receberá a título de honorários, líquidos e certos, os valores dispostos em seu Item 3 (L8906/94 22 §4º).</p>
+                <p>2.1.1 Na hipótese de figurarem múltiplos contratantes na avença, são todos coobrigados, podendo o faturamento ser direcionado em sua totalidade, a qualquer um ou a todos, ou de forma rateada, sem necessidade de se observar proporcionalidade, a critério do Contratado.
+                </p> 
+                <p>2.2 Sendo a atividade do Contratado, atividade de meio e não de resultado, fica estabelecido que os valores contratados serão sempre devidos, independente do resultado da ação.
+                </p>
+            </section>
+            <section>
+                <p>2.3 Os ônus da sucumbência, devidos pela parte contrária, reverterão integralmente ao Contratado (L8906/94 23).</p>
+                <p>2.4 Os pagamentos por ciclos podem se dar em recorrência ou por parcelamento.</p>
+                <p>2.4.1 Na hipótese de pagamento em recorrência, caso não tenha sido ajustada remuneração inicial, as cobranças relacionadas terão duração mínima de 12 meses, mesmo que concluído o objeto do contrato.</p>
+                <p>2.5 As horas trabalhadas serão calculadas tomando por base valores inteiros ou frações, sendo devidas desde o momento em que encerrada a atividade que motivou o início do contador.</p>
+                <p>2.6 A remuneração ad exitum (êxito), fixada no Item 3 da Proposta, tem por base de cálculo os valores reconhecidos em juízo, acordo ou transação extrajudicial, em favor do Contratante, ou que de qualquer forma importem em implemento, manutenção, reestabelecimento ou redução de perda patrimonial, indicados no Item 2.6.3; ou quantia previamente fixada para o caso de sucesso no serviço jurídico, sendo devidos, na primeira hipótese, a partir do ato que os fixar ou, na segunda, do momento em que realizado o objeto contratado.</p>
+                <p>2.6.1 Os valores devidos a título de êxito podem ser exigíveis à medida que se perfectibilizem etapas de distribuição negociadas. Deste modo, assim que alcançada alguma das etapas, será de imediato exigível o valor resultante da aplicação do percentual de rateio do êxito total correspondente à etapa alcançada sobre a parcela ou o valor fixo definido.</p>
+            </section>
+        </div>
+        <div class="page-break-after"></div>
+        <div class="two-columns">
+            <section>
+                <p>2.6.2 As etapas de distribuição representam êxitos autônomos, não sendo ressarcíveis os valores delas provenientes caso não seja satisfeita a etapa seguinte.</p>
+                <p>2.6.3 Nos casos indicados no Item 11, exceto para execuções e cumprimentos, será devido a título de remuneração pelo êxito relacionado à decisão final o valor que resultar do produto de seu percentual pelo valor da causa atualizado, reduzido em 30%, na seguinte proporção: i) 50% deste valor para o caso de atuação apenas na instância originária; adição de mais 25% para o caso de atuação na instância recursal ou, tratando-se de processo de competência originária dos Tribunais, 75%; ii)adição de mais 15% para o caso de atuação em instância recursal superior, caso trate de processos sem competência originaria de tribunais. Para execuções e cumprimentos, a base de cálculo será o valor da causa atualizado, sem qualquer redução. </p>
+                <p>2.7 Os valores constantes do Item 3 da Proposta são remunerações autônomas, não importando o pagamento de uma forma em desconto no pagamento de outra.</p>
+                <p>2.8 Salvo disposição específica em sentido diverso, quaisquer valores a receber ou recebidos pelo Contratante em função dos serviços contratados reverterão, inicialmente, em favor do Contratado, de modo a adimplir a totalidade dos valores aqui firmados, passando o saldo ou parcelas posteriores a reverterem em favor do Contratante.</p>
+                <p>2.8.1 Caso, por qualquer razão, tenha o Contratado recebido valores diretamente, deve realizar o repasse ao Contratado em até 24 horas.</p>
+                <h2>3. Reajuste</h2>
+                <p style="text-align: justify;">3.1 Durante a vigência do Contrato serão corrigidos os valores constantes da Proposta anualmente, pelo IGP-M ou outro índice que venha a substituí-lo, podendo ser usado seme-</p>
+            </section>
+            <section>    
+                <p>lhante instituído pela Fundação Getúlio Vargas (FGV) enquanto o Governo não indicar substituto. </p>
+                <p>3.1.1 O mesmo índice será utilizado para a correção de quaisquer valores relacionados a este instrumento.</p>
+                <h2>4. Despesas e custas</h2>
+                <p>4.1 Todos os custos processuais são de responsabilidade do Contratante, posto serem devidos ao Estado, bem como outras despesas advindas da prestação do serviço.</p>
+                <p>4.2 Não se incluirão no cômputo dos valores efetivos recebidos pelo contratante as parcelas produzidas a título de ressarcimento: tais como, custas, despesas recuperadas e honorários advocatícios pagos pela parte adversa.</p>
+                <p>4.3 As despesas ressarcíveis, que compreendem os pagamentos realizados pelo Contratado em benefício do Contratante e relacionadas ao objeto do Contrato, são exigíveis desde o momento de sua realização, devendo o reembolse ser realizado em até 24h após a comunicação. </p>
+                <p>4.4 No caso de desistência ou abandono da causa, as importâncias deixadas para as despesas de custas e emolumentos judiciais e extrajudiciais não serão restituídas, sendo cobradas do Contratante as que tiverem sido pagas pelo Contratado independentemente dos honorários aqui contratados, aplicando-se o disposto nos itens 10. </p>
+                <h2>5. Viagens</h2>
+                <p>5.1 As despesas de transporte, hospedagem, alimentação e demais custos de viagem, nas oportunidades necessárias à defesa dos interesses Contratados, correrão por conta do Contratante, devendo ser pagas antecipadamente, após provisionamento de custos.</p>
+            </section>
+        </div>
+        <div class="page-break-after"></div>
+        <div class="two-columns">
+            <section>
+                <p>5.2 As diárias têm natureza de provisão e prestam-se a cobrir despesas com alimentação, estadia e locomoção urbana, sempre que existir a necessidade de deslocamento para outro ponto do território nacional, fixadas em R$ 460,00, devendo serem pagas antecipadamente. </p>
+                <p>5.2.1 As diárias serão adicionadas em 30% caso o período de estádia ocorra em época de alta turística, em razão da alta do preço das despesas extraordinárias que estas cobrem. </p>
+                <p>5.3 O deslocamento se presta a custear os gastos com combustível e indenizar a depreciação do veículo sempre que houver a transposição de divisas do Município, calculando-se a distância percorrida a partir da sede da Contratada até o local de destino em outro ponto do território nacional, devendo ser pago antecipadamente. </p>
+                <p>5.3.1 O custo do deslocamento será calculado utilizando-se da seguinte fórmula: D = (Pc/Con + Dp) x Di. Sendo: D = Deslocamento; Pc = Preço do Combustível; Con = Consumo médio do veículo; Dp = Depreciação do veículo, fixada em R$ 0,40/km; Di = Distância.</p>
+                <p>5.3.2 Os valores devidos a título de deslocamento não envolvem pedágios, taxas ou outras tarifas referentes ao percurso da viagem. Tais valores serão apresentados ao Contratante e deverão ser pagos antecipadamente.</p>
+                <p>5.4 O relatório de viagem, enviado ao Contratante quando da necessidade de deslocamento, contendo a descrição pormenorizada dos custos e projeções de diárias, não é definitivo, podendo ser reajustado caso a situação fática resulte diferente da projetada inicialmente, de modo que podem ser revistos os valores apresentados para fins de adequação.</p>
+                <p>5.5 Quando do faturamento dos custos da viagem, será cobrada a diferença do que exceder a provisão de gastos e não esteja compreendido como despesa acobertada por diárias ou deslocamento. </p>
+            </section>
+            <section>
+                <p>5.5.1 Caso não ocorra a antecipação dos valores das diárias, bem como de eventuais passagens aéreas, poderá o Contratado, ao seu alvedrio, recusar a prestação do serviço, sem qualquer possibilidade de responsabilização profissional ou pessoal.</p>
+                <h2>6. Vencimento Antecipado</h2>
+
+                <p>6.1 As cobranças incluirão todos os valores devidos, a qualquer título, no ciclo mensal ou anual, caso não tenham sido cobrados separadamente.</p>
+                <p>6.1.1 O Contratante autoriza a manutenção de dados de cartões de crédito de sua titularidade ou que, por ter fornecido para registro, presume-se ter autorização específica de uso.</p>
+                <p>6.1.2 O Contratante pré-autoriza a realização de cobranças referentes a faturas de serviço em qualquer dos cartões que tenha fornecido ao Contratado.</p>
+                <p>6.2 Para o caso de pagamentos via transferência bancária, acaso não realizado por meio de depósito identificado, deverá o Contratante enviar o devido comprovante ao Contratante.</p>
+                <p>6.3 As remunerações ou despesas ressarcíveis devidas ao Contratado poderão ser retidas dos valores que receber em nome do Contratante ou da conta em que se encontram.</p>
+                <p>6.4 Ao Contratado, com exclusividade, compete o levantamento de valores, a qualquer título, relacionados a este instrumento, ainda que de titularidade do Contratante.</p>
+                <p>6.4.1 O Contratante autoriza, desde já, o Contratado a levantar valores depositados em seu favor e relacionados com o objeto do Contrato, comprometendo-se a assinar procuração com poderes específicos, caso seja necessário, em até 5 dias úteis, contados da notificação realizada na forma do Item 9.</p>
+            </section>
+        </div>
+        <div class="page-break-after"></div>
+        <div class="two-columns">
+            <section>
+                <p>6.4.2 Nas hipóteses em que o levantamento for autorizado apenas ao Contratante, este deverá agendar diligência em conjunto com o Contratado, obrigando-se a cumpri-la acompanhando de um representante deste e a observar o disposto no Item 2.8.</p>
+                <h2>7. Inadimplemento</h2>
+                <p>7.1 Não tendo sido pagos os honorários na data devida, serão corrigidos na forma indicada no Item 3.1, acrescidos de juros de 1% ao mês, pro rata die, e adicionados de multa de 10% sobre o total atualizado. </p>
+                <p>7.2 O descumprimento dos Itens 2.8 e 6.4 implica na incidência de multa específica de 15% sobre o valor levantado ou recebido, sem a exclusão de qualquer outra prevista neste instrumento.
+                </p>
+                <h2>8. Obrigações</h2>
+                <p>8.1 O Contratado obriga-se a informar o Contratante sobre os prazos, termos e condições dos Contratos, processos e outros procedimentos de que tenha participado, sempre que solicitado.</p>
+                <p>8.2 O Contratante compromete-se a fornecer todos os documentos e informações que forem pedidos pelos advogados Contratados, necessários à boa prestação dos serviços.</p>
+                <p>8.3 O contratante compromete-se a manter seus dados e métodos de pagamento atualizados.</p>
+                <h2>9. Comunicações</h2>
+                <p>9.1 As comunicações serão realizadas por qualquer meio, a critério do Contratado, considerando-se válidas desde que realizadas de acordo com os dados declinados pelo Contratante quando do seu cadastro, prescindindo-se de prova de que este teve conhecimento de seu conteúdo.</p>
+            </section>
+            <section>
+                <p>9.2 Destaca-se que eventual falha no sistema de intimação eletrônica ou do serviço utilizado para leitura das intimações exime o Contratado de qualquer responsabilidade.</p>
+                <p>9.3 O(s) Contratante(s) autorizam expressamente o envio de informativos e ofertas de serviço pelo Contratado.</p>
+                <h2>10. Confidencialidade</h2>
+                <p>10.1 Enquanto aplicáveis os termos contratados, quaisquer das partes ("Parte Divulgadora") pode enviar à outra parte ("Parte Receptora") informações confidenciais ou sujeitas à proteção legal. Todas as informações fornecidas pela Parte Divulgadora e identificada como "Confidencial" ou outro termo sinônimo, ou que a Parte Receptora, de forma razoável, deveria aperceber como sendo confidencial, deve ser entendida como Informação Confidencial. Para esclarecimento de dúvida, presente Acordo é confidencial.</p>
+                <p>10.2 Informações confidenciais não podem ser divulgadas a terceiros sem o consentimento da Parte Divulgadora, devendo ser utilizadas apenas internamente.</p>
+                <h2>11. Vencimento Antecipado</h2>
+                <p>11.1 Considerar-se-á vencido e imediatamente exigível o total dos honorários contratados, sem qualquer redução, independentemente de notificação em qualquer das seguintes hipóteses:</p>
+                <ul>
+                    <li>No caso de composição amigável feita por qualquer das partes litigantes;</li>
+                    <li>Não prosseguimento da ação por quaisquer circunstâncias não ocasionadas pelos advogados;</li> 
+                    <li>Comprovada a inexigibilidade de pagamento por motivo de dano ou perda de bens ou direitos;</li>
+                </ul>
+            </section>
+        </div>
+        <div class="page-break-after"></div>
+        <div class="two-columns">
+
+            <section>
+                <ul>
+                    <li>Transitando em julgado a sentença proferida na ação;</li>
+                    <li>Se for cassado o mandato sem culpa dos advogados Contratados. Rescisão, resolução ou resilição.</li>
+                </ul>
+                <p>11.2 Caso a circunstância que deu causa ao vencimento antecipado implicar na perda de honorários de sucumbência, por ter obstado sua fixação ou majoração ao impedir a prática do ato pelo juízo, e desde que já existentes os fatos imponíveis necessários, mesmo sem trânsito em julgado ou na pendência de recurso, incidirá multa compensatória específica de 10% sobre base de cálculo fixada na forma do Item 2.6.3, sem a exclusão de qualquer outra prevista neste instrumento. </p>
+                <p>11.3 Do mesmo modo, caso a circunstância que deu causa ao vencimento antecipado obstar a fixação da multa do CPC 523 §1º, ao impedir que o ato fosse realizado pelo juízo, e desde que já existentes os fatos imponíveis necessários para tanto, incidirá multa compensatória específica de 1% sobre base de cálculo fixada na forma do Item 2.6.3, sem a exclusão de qualquer outra prevista neste instrumento.</p>
+                <h2>12. Resilição, resolução e rescisão</h2>
+                <p>12.1 O Contratante e o Contratado poderão resilir o Contrato em qualquer tempo, por mútuo consentimento, devendo a parte interessada comunicar à outra, com antecedência de, no mínimo, 10 (dez) dias.</p>
+                <p>12.1.1 A comunicação da resilição poderá ser realizada por quaisquer dos canais disponíveis, sendo confirmada na forma do Item 9.</p>
+                <p>12.2 Em caso de mora superior a 30 (trinta) dias, poderá o Contratado suspender, total ou parcialmente, a prestação dos serviços ou resolver o contrato, total ou parcialmente, mediante comunicação na forma do Item 9.</p>
+            </section>
+
+            <section>
+                <p>12.2.1 A mora superior a 90 dias implica em resolução automática.</p>
+                <p>12.3 A parte que descumprir qualquer das cláusulas deste Contrato ou frustrar a realização de seu fim, dará à outra, o direito de rescindir o presente instrumento, mediante comunicação na forma do Item 9, ficando desobrigada a parte inocente.</p>
+                <p>12.4 Extinto o contrato, serão faturados e cobrados, de plano, todos os valores exigíveis, podendo a Contratada, por deliberalidade, ajustar outras condições para a sua quitação ou optar por multa compensatória equivalente a 40% do valor global do contrato, sem prejuízo de eventual suplementação das perdas e danos.</p>
+                <p>12.5 Considera-se valor global do contrato a soma de todos os honorários contratados, nos seguintes termos:</p>
+                <ul>
+                    <li>Para as obrigações recorrentes, a soma de 12 prestações;</li> 
+                    <li>Para êxito percentual, o produto de da soma de seus percentuais pelo valor da causa, valor provisionado ou valor do bem da vida, nesta ordem de preferência, ainda que fixado por etapa;</li>
+                    <li>Para as demais obrigações com valores nominais, a soma de todos os valores.</li>
+                </ul>
+                <p>12.6 Em caso de necessidade de ajuizamento de ações ou cobrança administrativa relativas a esse instrumento, será devido, a título de honorários contratuais, 10% sobre o valor exigido, ainda que realizada pelos colaboradores do Contratado.</p>
+                <h2> 13. Prepostos do Contratado</h2>
+                
+            </section>
+        </div>
+        <div class="page-break-after"></div>
+        <div class="two-columns">
+            <section>
+                <p>13.1 O Contratado poderá se fazer substituir por advogados e/ou estagiários a ele vinculados e por ele indicados, não havendo, entretanto, qualquer vinculação direta e pagamento de honorários a estes.</p>
+                <p>13.2 Nas ocasiões em que o Contratado for substituído, permanecerão válidas as demais obrigações contratuais de ambas as partes.</p>
+                <h2>14. Conflito de Patrocínio</h2>
+                <p>14.1 Caso o Contratante seja parte de litígio que envolva pessoas físicas ou jurídicas às quais o Contratado também preste serviço, a este caberá a indicação de escritório isento a fim de evitar um patrocínio conflitante.</p>
+                <h2>15. Retenção</h2>
+                <p>15.1 Os documentos entregues ao Contratado ficarão sob sua guarda pelo período que este fixar, em respeito à sua política de retenção.</p>
+                <p>15.2 Concluído o período de retenção determinado unilateralmente pelo Contratado, o Contratante será notificado a reaver os documentos relacionados a este instrumento, no prazo de 1 semana.</p>
+            </section>
+
+            <section>
+                <p>15.3 Caso o Contratante não cumpra a notificação, os documentos serão destruídos e descartados, sem qualquer possibilidade de responsabilização do Contratado.</p>
+                <h2>16. Eficácia</h2>
+                <p>16.1 Este Contrato não revoga nem altera qualquer disposição contratual prevista em outros firmados entre as partes.</p>
+                <h2>17. Constituição do Termo</h2>
+                <p>17.1 Quando da interpretação das cláusulas deste instrumento, sempre que se pretender analisar um Item, deverão ser considerados seus Subitens.</p>
+                <p>17.2 Os casos omissos deverão ter solução por mútuo consentimento e, desde já, fica eleito o foro da Comarca de Rio Branco/AC para dirimir quaisquer dúvidas ou controvérsias provenientes do presente Contrato, seja qual for o domicílio dos Contratantes, sendo eleitos a mediação e juízo arbitral, de acordo com a L9307/96, para dirimir eventuais litígios decorrentes deste Contrato.</p>
+            </section>
+        </div>
+        <section>
+            <p>Por estarem assim justos e contratados e, de comum acordo, aceitarem as condições deste Contrato, o assinam, de modo a garantir os seus jurídicos e legais efeitos.</p>
+        </section>
+
+        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
+        <div class="two-columns">
+            <section class="signature">
+                <div class="line"></div> <!-- Linha visual para a assinatura -->
+                <p>Assin. Daniel Mathaus Costa de Macêdo</p>
+                <p>Contratante 1</p>
+            </section>
+            <section class="signature">
+                <div class="line"></div> <!-- Linha visual para a assinatura -->
+                <p>Daniel Mathaus Costa de Macêdo</p>
+                <p>OAB/AC 4.355</p>
+            </section>
+        </div>
+        <footer>
+            <p class="highlight">V.1.0 – 19/03/2024</p>
+        </footer>
+    </div>
+</body>
+</html>
