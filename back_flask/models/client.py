@@ -1,5 +1,5 @@
 from sql_alchemy import db
-
+from sqlalchemy import Boolean
 class ClientModel(db.Model):
     __tablename__ = 'client'
 
@@ -9,19 +9,20 @@ class ClientModel(db.Model):
     address = db.Column(db.String(150))
     email = db.Column(db.String(150))
     phone = db.Column(db.String(150))
-    signer_type = db.Column(db.String(50))
-
-
+    is_responsible = db.Column(Boolean, default=False)
+    responsible_id = db.Column(db.Integer, db.ForeignKey('client.client_id', ondelete='SET NULL'), nullable=True)
+    responsible = db.relationship('ClientModel', remote_side=[client_id],  backref=db.backref('dependents', cascade='all, delete', passive_deletes=True))
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
     
-    def __init__(self, name, cpf_cnpj, address, email, phone, signer_type, contract_id):
+    def __init__(self, name, cpf_cnpj, address, email, phone, contract_id, is_responsible=False, responsible_id=None):
         self.name = name
         self.cpf_cnpj = cpf_cnpj
         self.address = address
         self.email = email
         self.phone = phone
-        self.signer_type = signer_type
         self.contract_id = contract_id
+        self.responsible_id = responsible_id
+        self.is_responsible = is_responsible
 
     def json(self):
         return {
@@ -31,8 +32,10 @@ class ClientModel(db.Model):
             'address': self.address,
             'email': self.email,
             'phone': self.phone,
-            'signer_type': self.signer_type,
-            'contract_id': self.contract_id
+            'contract_id': self.contract_id,
+            'is_responsible': self.is_responsible,
+            'responsible_id': self.responsible_id,
+            'responsible': self.responsible.json() if self.responsible else None,
         }
 
     @classmethod
@@ -50,11 +53,14 @@ class ClientModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update_client(self, name, cpf_cnpj, address, email, phone, signer_type, contract_id):
+    def update_client(self, name, cpf_cnpj, address, email, phone, contract_id, is_responsible=False, responsible_id=None):
         self.name = name
         self.cpf_cnpj = cpf_cnpj
         self.address = address
         self.email = email
         self.phone = phone
-        self.signer_type = signer_type
         self.contract_id = contract_id
+        self.responsible_id = responsible_id
+        self.is_responsible = is_responsible
+
+        db.session.commit()

@@ -19,7 +19,8 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Grid
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -34,6 +35,7 @@ const Contract = () => {
     const apiPrivate = useAxiosPrivate();
 
     const [contract, setContract] = useState(null);
+    const [client_id, setClientId] = useState(null);
     const [parts, setParts] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +46,8 @@ const Contract = () => {
         email: '',
         phone: '',
         address: '',
-        signer_type: ''
+        responsible_id: null,
+        responsible: null
     });
 
     const fetchContractDetails = async () => {
@@ -60,7 +63,8 @@ const Contract = () => {
         }
     };
 
-    const handleAddPart = () => {
+    const handleAddPart = (client_id) => {
+        setClientId(client_id);
         setOpen(true);
     };
 
@@ -72,7 +76,8 @@ const Contract = () => {
             email: '',
             phone: '',
             address: '',
-            signer_type: '',
+            responsible_id: null,
+            responsible: null
         });
     };
 
@@ -98,36 +103,45 @@ const Contract = () => {
             novoContratante.cpf_cnpj &&
             novoContratante.email &&
             novoContratante.phone &&
-            novoContratante.address &&
-            novoContratante.signer_type
+            novoContratante.address
         );
     };
 
-    const addContratante = () => {
+    const addContratante = async () => {
         if (!areFieldsFilled()) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
+        setOpen(false);
+
+        // Mostrar tela de carregamento
+        const loadingSwal = Swal.fire({
+            title: 'Aguarde...',
+            text: 'Estamos adicionando ...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading(); // Mostra o indicador de loading
+            }
+        });
         try {
-            Swal.fire({
-                title: 'Aguarde...',
-                text: 'Estamos criando adicionando o contratante.',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading(); // Mostra o indicador de loading
-                }
-            });
-            apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
+            if (!client_id) {
+            await apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
             setParts((prev) => [...prev, novoContratante]);
-            Swal.close();
+            } else {
+                await apiPrivate.post(`/contract/${contract_id}/client/${client_id}/responsable`, novoContratante);
+                await fetchContractDetails()
+            }
+            loadingSwal.close();
         } catch (error) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Ocorreu um erro ao adicionar o contratante.',
             })
-            Swal.close();
+            loadingSwal.close();
         }
+
+        setClientId(null);
 
         handleCloseModal();
     };
@@ -144,16 +158,27 @@ const Contract = () => {
                 cancelButtonText: 'Cancelar'
             }).then(async (result) => {
                 if (result.isConfirmed) {
+                    const loadingSwal = Swal.fire({
+                        title: 'Aguarde...',
+                        text: 'Estamos excluindo ...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading(); // Mostra o indicador de loading
+                        }
+                    });
                     const response = await apiPrivate.delete(`/client/${clientId}`);
                     if (response.status === 200) {
+                        fetchContractDetails();
+                        loadingSwal.close();
                         Swal.fire({
                             title: 'Contratante excluído com sucesso!',
                             icon: 'success',
                             confirmButtonColor: 'var(--orange)',
                             confirmButtonText: 'OK'
                         });
-                        fetchContractDetails();
+                        
                     } else {
+                        loadingSwal.close();
                         Swal.fire({
                             title: 'Ocorreu um erro ao excluir o contratante.',
                             icon: 'error',
@@ -162,7 +187,8 @@ const Contract = () => {
                         });
                     }
                 }
-            }) .catch((error) => {
+            }).catch((error) => {
+                
                 Swal.fire({
                     title: 'Ocorreu um erro ao excluir o contratante.',
                     icon: 'error',
@@ -191,47 +217,90 @@ const Contract = () => {
             <List component={Paper} style={{ marginBottom: '24px' }}>
                 {parts.length > 0 ? (
                     parts.map((part, index) => (
-                        <div>
-                        <ListItem key={index}>
-                            <ListItemText
-                                primary={<>{part.name} - {part.signer_type}</>}
-                                secondary={
-                                    <>
-                                        <div>CPF: {part.cpf_cnpj}</div>
-                                        <div>Email: {part.email}</div>
-                                        <div>Telefone: {part.phone}</div>
-                                        <div>Endereço: {part.address}</div>
-                                    </>
-                                }
-                            />
+                        <div key={index}>
+                            <ListItem>
+                                <Grid container spacing={2} alignItems="center">
+                                    {/* Coluna de Dados do Contratante */}
+                                    <Grid item xs={4}>
+                                        <ListItemText
+                                            primary={<>{part.name} - {part.signer_type}</>}
+                                            secondary={
+                                                <>
+                                                    <div>CPF: {part.cpf_cnpj}</div>
+                                                    <div>Email: {part.email}</div>
+                                                    <div>Telefone: {part.phone}</div>
+                                                    <div>Endereço: {part.address}</div>
+                                                </>
+                                            }
+                                        />
+                                    </Grid>
 
-                            <ListItemSecondaryAction>
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={() => handleDeletePart(part.client_id)}
-                                >
-                                    <DeleteIcon />
-                                </Button>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                        {index < parts.length - 1 && <Divider />}
+                                    {/* Coluna de Dados do Responsável (se houver) */}
+                                    <Grid item xs={4}>
+                                        {part.responsible ? (
+                                            <ListItemText
+                                                primary={<>{part.responsible.name} - Responsável</>}
+                                                secondary={
+                                                    <>
+                                                        <div>CPF: {part.responsible.cpf_cnpj}</div>
+                                                        <div>Email: {part.responsible.email}</div>
+                                                        <div>Telefone: {part.responsible.phone}</div>
+                                                        <div>Endereço: {part.responsible.address}</div>
+                                                    </>
+                                                }
+                                            />
+                                        ) : (
+                                            <Typography variant="body2" color="textSecondary">
+                                                Sem responsável
+                                            </Typography>
+                                        )}
+                                    </Grid>
+
+                                    {/* Coluna de Ações */}
+                                    <Grid item xs={4} style={{ textAlign: 'right' }}>
+                                        {!part.responsible && (
+                                            <Button
+                                            variant="outlined"
+                                            startIcon={<AddIcon />}
+                                            onClick={() => handleAddPart(part.client_id)}
+                                            className="button-add"
+                                        >
+                                            Responsável
+                                        </Button>
+                                        )}
+                                        
+                                        <Button
+                                            variant="outlined"
+                                            color="secondary"
+                                            onClick={() => handleDeletePart(part.client_id)}
+                                            style={{ marginLeft: '8px' }}
+                                        >
+                                            <DeleteIcon />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </ListItem>
+                            {index < parts.length - 1 && <Divider />}
                         </div>
                     ))
                 ) : (
-                    <Typography variant="body2" style={{ padding: '16px' }}>Nenhuma parte cadastrada.</Typography>
+                    <Typography variant="body2" style={{ padding: '16px' }}>
+                        Nenhuma parte cadastrada.
+                    </Typography>
                 )}
+
                 <ListItem>
                     <Button
                         variant="outlined"
                         startIcon={<AddIcon />}
-                        onClick={handleAddPart}
+                        onClick={() =>handleAddPart(null)}
                         className="button-add"
                     >
-                        Adicionar Nova Parte
+                        Novo Contratante
                     </Button>
                 </ListItem>
             </List>
+
 
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
                 Documentos
@@ -252,20 +321,20 @@ const Contract = () => {
                 <ListItem>
                     {parts.length > 0 && (
                         <Button
-                        variant="outlined"
-                        startIcon={<CloudUploadIcon />}
-                        onClick={handleUploadDocument}
-                        className="button-add"
-                    >
-                        Enviar Novo Documento
-                    </Button>
+                            variant="outlined"
+                            startIcon={<CloudUploadIcon />}
+                            onClick={handleUploadDocument}
+                            className="button-add"
+                        >
+                            Enviar Novo Documento
+                        </Button>
                     )}
-                    
+
                 </ListItem>
             </List>
 
             <Dialog open={open} onClose={handleCloseModal} maxWidth="lg" fullWidth>
-                <DialogTitle className="dialog-title">Adicionar Novo Contratante</DialogTitle>
+                <DialogTitle className="dialog-title">Adicionar Novo {client_id ? 'Responsável' : 'Contratante'}</DialogTitle>
                 <DialogContent className="dialog-content">
                     <Box mb={2}>
                         <TextField
@@ -320,8 +389,8 @@ const Contract = () => {
                             rows={4}
                         />
                     </Box>
-                    <Box mb={2}>
-                        <FormControl  fullWidth>
+                    {/* <Box mb={2}>
+                        <FormControl fullWidth>
                             <InputLabel id="signer_type-label">Tipo</InputLabel>
                             <Select
                                 labelId="signer_type-label"
@@ -334,7 +403,7 @@ const Contract = () => {
                                 <MenuItem value="Responsável">Responsável</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
                 </DialogContent>
                 <DialogActions className="dialog-actions">
                     <Button onClick={handleCloseModal} color="primary">

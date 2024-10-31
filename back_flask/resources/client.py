@@ -20,7 +20,7 @@ class Clients(Resource):
 
         # Calcular o total de páginas
         total_pages = ceil(total_clients / per_page)
-        clients = ClientModel.query.filter_by(contract_id=contract_id).offset(offset).limit(per_page).all()
+        clients = ClientModel.query.filter_by(contract_id=contract_id, is_responsible=False).offset(offset).limit(per_page).all()
 
         return {
             'clients': [client.json() for client in clients],
@@ -38,7 +38,7 @@ class Clients(Resource):
         data = Client.parser.parse_args()
         data['cpf_cnpj'] = re.sub(r'\D', '', data['cpf_cnpj'])
         data['contract_id'] = contract_id
-        if data['name'] is None or data['cpf_cnpj'] is None or data['address'] is None or data['email'] is None or data['phone'] is None or data['signer_type'] is None:
+        if data['name'] is None or data['cpf_cnpj'] is None or data['address'] is None or data['email'] is None or data['phone'] is None:
             return {'message': 'Client data not valid'}, 500
 
         validator = CNPJ() if len(data['cpf_cnpj']) == 14 else CPF()
@@ -63,7 +63,6 @@ class Client(Resource):
     parser.add_argument('address', type=str, required=True, help="The field 'address' cannot be left blank")
     parser.add_argument('email', type=str, required=True, help="The field 'email' cannot be left blank")
     parser.add_argument('phone', type=str, required=True, help="The field 'phone' cannot be left blank")
-    parser.add_argument('signer_type', type=str, required=True, help="The field 'signer_type' cannot be left blank")
 
    
 
@@ -80,8 +79,50 @@ class Client(Resource):
         client = ClientModel.find_client(client_id)
         if client:
             try:
+                responsible_client = ClientModel.find_client(client.responsible_id)
+                if responsible_client:
+                    responsible_client.delete_client()
                 client.delete_client()
                 return {'message': 'Client deleted'}
             except:
                 return {'message': 'Cannot delete client'}, 400
         return {'message': 'Client not found'}, 404
+    
+
+
+class Responsable(Resource):
+    @jwt_required()
+    def post(self, client_id, contract_id):
+        
+        contract = ContractModel.find_contract(contract_id)
+        if not contract:
+            return {'message': 'Contract not found'}, 404
+        data = Client.parser.parse_args()
+        data['cpf_cnpj'] = re.sub(r'\D', '', data['cpf_cnpj'])
+        data['contract_id'] = contract_id
+        if data['name'] is None or data['cpf_cnpj'] is None or data['address'] is None or data['email'] is None or data['phone'] is None:
+            return {'message': 'Client data not valid'}, 500
+
+        validator = CNPJ() if len(data['cpf_cnpj']) == 14 else CPF()
+        if len(data['cpf_cnpj']) == 11:  # CPF tem 11 dígitos
+            if not validator.validate(data['cpf_cnpj']):
+                return {'message': 'Invalid CPF'}, 400
+        elif len(data['cpf_cnpj']) == 14:  # CNPJ tem 14 dígitos
+            if not validator.validate(data['cpf_cnpj']):
+                return {'message': 'Invalid CNPJ'}, 400
+        else:
+            return {'message': 'cpf_cnpj must be either 11 or 14 digits long'}, 400
+        
+        client = ClientModel.find_client(client_id)
+        if not client:
+            return {'message': 'Client not found'}, 404
+
+        try:
+            data['is_responsible'] = True   
+            responsible = ClientModel(**data)
+            responsible.save_client()
+            client.responsible_id = responsible.client_id
+            client.save_client()
+        except Exception as e:
+            return {'message': f'An error occurred inserting the client {e}'}, 500
+        return client.json(), 201

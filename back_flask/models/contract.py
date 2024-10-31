@@ -29,7 +29,7 @@ class ContractModel(db.Model):
             'status': self.status,
             'created_at': self.created_at.strftime('%d/%m/%Y'),
             'updated_at': self.updated_at.strftime('%d/%m/%Y'),
-            'clients':  [client.json() for client in self.clients],
+            'clients':  [client.json() for client in self.clients if client.is_responsible == False],
             'documents':  [document.json() for document in self.documents]
         }
 
