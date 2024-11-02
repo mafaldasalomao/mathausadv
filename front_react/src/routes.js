@@ -26,10 +26,11 @@ export default function Routes() {
                                                 <UserLayout />
                                 }>
                                     <Route path="dashboard" element={<Dashboard />} />
-                                    <Route path="documents/new" element={<NewEditDocument />} />
+                                    
                                     <Route path="contracts" element={<ContractList />} />
                                     <Route path="contracts/new" element={<NewEditContract />} />
                                     <Route path="contracts/:contract_id" element={<Contract />} />
+                                    <Route path="contracts/:contract_id/documents/new" element={<NewEditDocument />} />
                                     {/* <Route path="products/new" element={<NewEditProduct />} />
                                     <Route path="productslist" element={<ProductList />} />
                                     <Route path="orderslist" element={<OrdersList />} />

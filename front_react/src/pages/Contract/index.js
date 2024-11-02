@@ -16,10 +16,8 @@ import {
     TextField,
     DialogActions,
     Box,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
+    Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow,
     Stack,
     Grid
 } from '@mui/material';
@@ -41,6 +39,7 @@ const Contract = () => {
     const [documents, setDocuments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [open, setOpen] = useState(false);
+
     const [novoContratante, setNovoContratante] = useState({
         name: '',
         cpf_cnpj: '',
@@ -94,9 +93,31 @@ const Contract = () => {
         }));
     };
 
+
+    const sendDocument = async (type) => {
+        try {
+            const formData = new FormData();
+            formData.append('service', 'vazio');
+            formData.append('fees', 'vazio');
+            formData.append('description', 'vazio');
+            formData.append('document_type', type);
+            formData.append('contract_id', contract_id);
+            const response = await apiPrivate.post('/documents', formData, {
+                withCredentials: true
+            });
+            setDocuments([...documents, response.data]);
+        } catch (error) {        
+            console.error('Erro ao enviar o documento:', error);
+        }
+
+    }
     const handleUploadDocument = (type) => {
         if (type === 'contrato') {
-            navigate("documents/new");
+            navigate(`documents/new?type=${type}`);
+        }
+        if (type === 'procuracao') {
+            sendDocument(type);
+            sendDocument("dh");
         }
         console.log('Enviar novo documento');
     };
@@ -310,18 +331,46 @@ const Contract = () => {
                 Documentos
             </Typography>
             <List component={Paper}>
-                {documents.length > 0 ? (
-                    documents.map((document, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={document.name} />
-                            <ListItemSecondaryAction>
-                                {/* Aqui você pode adicionar botões adicionais, se necessário */}
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body2" style={{ padding: '16px' }}>Nenhum documento cadastrado.</Typography>
-                )}
+            <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Nome</TableCell>
+                        <TableCell>Descrição</TableCell>
+                        <TableCell>Assine Online ID</TableCell>
+                        <TableCell>Google Drive ID</TableCell>
+                        <TableCell>Data de Assinatura</TableCell>
+                        <TableCell>Honorários</TableCell>
+                        <TableCell>Serviço</TableCell>
+                        <TableCell>ID do Contrato</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {documents.length > 0 ? (
+                        documents.map((document, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{document.name}</TableCell>
+                                <TableCell>{document.description}</TableCell>
+                                <TableCell>{document.assine_online_id}</TableCell>
+                                <TableCell>{document.gdrive_id}</TableCell>
+                                <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
+                                <TableCell>{document.fees}</TableCell>
+                                <TableCell>{document.service}</TableCell>
+                                <TableCell>{document.contract_id}</TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={8} align="center">
+                                <Typography variant="body2" style={{ padding: '16px' }}>
+                                    Nenhum documento cadastrado.
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </TableContainer>
                 <ListItem>
                     {parts.length > 0 && (
                         <Stack spacing={2}> {/* Adiciona espaçamento entre os botões */}
@@ -329,7 +378,7 @@ const Contract = () => {
                         <Button
                             variant="outlined"
                             startIcon={<AddIcon />}
-                            onClick={handleUploadDocument('contrato')}
+                            onClick={() =>handleUploadDocument('contrato')}
                             className="button-add"
                         >
                             Gerar Contrato
@@ -337,7 +386,7 @@ const Contract = () => {
                         <Button
                             variant="outlined"
                             startIcon={<AddIcon />}
-                            onClick={handleUploadDocument}
+                            onClick={() =>handleUploadDocument('procuracao')}
                             className="button-add"
                         >
                             DH e Procuração

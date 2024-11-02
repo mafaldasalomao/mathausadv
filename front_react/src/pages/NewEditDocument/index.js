@@ -1,53 +1,33 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
   TextField,
   Button,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  Box
 } from '@mui/material';
 import './styles.css'; // Importa o arquivo CSS
-
+import Swal from 'sweetalert2';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 const NewEditDocument = () => {
-  // Estado para os dados dos contratantes
-  const [contratantes, setContratantes] = useState([]);
-
+  const { contract_id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const document_type = queryParams.get('type');
+  const apiPrivate = useAxiosPrivate();
   // Estado para os dados do documento
   const [documento, setDocumento] = useState({
-    servico: '',    
-    honorarios: ''
+    service: '',    
+    fees: '',
+    description: '',
+    document_type: document_type,
+    contract_id: contract_id
   });
 
-  // Estado para controlar a abertura do modal
-  const [open, setOpen] = useState(false);
 
-  // Estado para os dados do novo contratante
-  const [novoContratante, setNovoContratante] = useState({
-    nome: '',
-    cpf: '',
-    email: '',
-    telefone: ''
-  });
 
-  // Função para lidar com a mudança dos inputs do novo contratante
-  const handleNovoContratanteChange = (e) => {
-    const { name, value } = e.target;
-    setNovoContratante({ ...novoContratante, [name]: value });
-  };
-
-  // Função para adicionar um novo contratante
-  const addContratante = () => {
-    setContratantes([...contratantes, novoContratante]);
-    setNovoContratante({ nome: '', cpf: '', email: '', telefone: '' }); // Limpar o estado do novo contratante
-    setOpen(false); // Fechar o modal
-  };
 
   // Função para lidar com a mudança dos inputs do documento
   const handleDocumentoChange = (e) => {
@@ -56,91 +36,39 @@ const NewEditDocument = () => {
   };
 
   // Função para lidar com a submissão do formulário do documento
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('Contratantes:', contratantes);
+    const response = await apiPrivate.post('/documents', documento, {
+      withCredentials: true
+    })
+
+    if (response.status !== 201) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Ocorreu um erro ao criar o documento.',
+        confirmButtonText: 'Ok',
+      })
+      return;
+    }
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso',
+      text: 'Documento criado com sucesso!',
+      confirmButtonText: 'Ok',
+    })
+
+    navigate(`user/contracts/${contract_id}`);
     console.log('Documento:', documento);
   };
 
   return (
     <Container className="container">
       <Typography variant="h4" gutterBottom className="title">
-        Cadastro de Documento de Contrato
+        Geração do Documento de Contrato
       </Typography>
 
-      {/* Lista de Dados dos Contratantes */}
-      <Typography variant="h6" gutterBottom className="subtitle">
-        Dados dos Contratantes
-      </Typography>
-      {contratantes.length === 0 ? (
-        <Typography variant="body1" sx={{ color: 'gray' }}>
-          Adicione as partes do documento
-        </Typography>
-      ) : (
-        <List className="list">
-          {contratantes.map((cont, index) => (
-            <ListItem key={index} className="list-item">
-              <ListItemText
-                primary={`Nome: ${cont.nome || 'Não informado'}`}
-                secondary={`CPF: ${cont.cpf || 'Não informado'}, Email: ${cont.email || 'Não informado'}, Telefone: ${cont.telefone || 'Não informado'}`}
-                className="list-item-text"
-              />
-            </ListItem>
-          ))}
-        </List>
-      )}
-
-      {/* Botão para abrir o modal de adicionar uma nova parte */}
-      <Button variant="outlined" onClick={() => setOpen(true)} className="button-add">
-        + Parte
-      </Button>
-
-      {/* Modal para adicionar novo contratante */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle className="dialog-title">Adicionar Novo Contratante</DialogTitle>
-        <DialogContent className="dialog-content">
-          <TextField
-            label="Nome"
-            name="nome"
-            value={novoContratante.nome}
-            onChange={handleNovoContratanteChange}
-            fullWidth
-            className="input-field"
-          />
-          <TextField
-            label="CPF"
-            name="cpf"
-            value={novoContratante.cpf}
-            onChange={handleNovoContratanteChange}
-            fullWidth
-            className="input-field"
-          />
-          <TextField
-            label="Email"
-            name="email"
-            value={novoContratante.email}
-            onChange={handleNovoContratanteChange}
-            fullWidth
-            className="input-field"
-          />
-          <TextField
-            label="Telefone"
-            name="telefone"
-            value={novoContratante.telefone}
-            onChange={handleNovoContratanteChange}
-            fullWidth
-            className="input-field"
-          />
-        </DialogContent>
-        <DialogActions className="dialog-actions">
-          <Button onClick={() => setOpen(false)} sx={{ color: 'var(--orange)' }}>
-            Cancelar
-          </Button>
-          <Button onClick={addContratante} sx={{ color: 'var(--orange)' }}>
-            Adicionar
-          </Button>
-        </DialogActions>
-      </Dialog>
+    
 
       {/* Formulário de Cadastro do Documento */}
       <Typography variant="h6" gutterBottom className="subtitle">
@@ -150,8 +78,8 @@ const NewEditDocument = () => {
         <Box mb={2}>
           <TextField
             label="Serviço"
-            name="servico"
-            value={documento.servico}
+            name="service"
+            value={documento.service}
             onChange={handleDocumentoChange}
             fullWidth
             required
@@ -161,10 +89,12 @@ const NewEditDocument = () => {
         <Box mb={2}>
           <TextField
             label="Honorários"
-            name="honorarios"
-            value={documento.honorarios}
+            name="fees"
+            value={documento.fees}
             onChange={handleDocumentoChange}
             fullWidth
+            multiline
+            rows={4}
             required
             className="input-field"
           />

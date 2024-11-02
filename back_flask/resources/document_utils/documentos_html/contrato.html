@@ -157,7 +157,7 @@
 
         <section>
             <h2>3 – Honorários</h2>
-            <p>{{ fees }}</p>
+            <p>{{ fees | replace("\n", "<br>") | safe }}</p>
         </section>
 
         <section>
