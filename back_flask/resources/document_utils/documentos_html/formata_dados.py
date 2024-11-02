@@ -26,6 +26,14 @@ def gerar_div_partes(partes):
 
 def gerar_div_assinaturas(assinaturas):
     div_html = ''
+    assinatura_daniel = '''
+            <section class="signature" style="width: 50%; margin: auto; text-align: center">
+            <div class="line" ></div> <!-- Linha visual para a assinatura -->
+            <p>Assin. Daniel Mathaus Costa de Macêdo</p>
+            <p>OAB/AC 4.355</p>
+        </section>'''
+    
+
     for i, assinatura in enumerate(assinaturas):
         # Abre uma nova div a cada duas assinaturas
         if i % 2 == 0:
@@ -43,7 +51,7 @@ def gerar_div_assinaturas(assinaturas):
         if i % 2 == 1 or i == len(assinaturas) - 1:
             div_html += '</div>'
 
-    return div_html
+    return div_html + assinatura_daniel
 
 
 def gerar_lista_contatos(partes):

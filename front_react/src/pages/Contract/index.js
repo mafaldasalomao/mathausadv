@@ -94,7 +94,10 @@ const Contract = () => {
         }));
     };
 
-    const handleUploadDocument = () => {
+    const handleUploadDocument = (type) => {
+        if (type === 'contrato') {
+            navigate("documents/new");
+        }
         console.log('Enviar novo documento');
     };
 
@@ -326,7 +329,7 @@ const Contract = () => {
                         <Button
                             variant="outlined"
                             startIcon={<AddIcon />}
-                            onClick={handleUploadDocument}
+                            onClick={handleUploadDocument('contrato')}
                             className="button-add"
                         >
                             Gerar Contrato
