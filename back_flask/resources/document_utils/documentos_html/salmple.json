@@ -1,0 +1,33 @@
+{
+    "document_type": "Contrato",
+    "type": "Avulso",
+    "origin": "Sede",
+    "date": "24/10/2024",
+    "services" :"",
+    "fees": "",
+    "contact": "",
+    "parts": [
+        {
+            "type": "Declarante",
+            "cpf_cnpj": "322.467.572-15",
+            "name": "Guilherme Gomes de Sousa",
+            "email": "danielmathaus@hotmail.com",
+            "address": "Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre"
+        },
+        {
+            "type": "Representante",
+            "cpf_cnpj": "322.467.572-15",
+            "name": "Lúcia Maria Gomes Ferreira",
+            "email": "danielmathaus@hotmail.com",
+            "address": "Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre"
+        }
+        ,
+        {
+            "type": "Representante",
+            "cpf_cnpj": "322.467.572-15",
+            "name": "Lúcia Maria Gomes Ferreira",
+            "email": "danielmathaus@hotmail.com",
+            "address": "Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre"
+        }
+    ]
+}

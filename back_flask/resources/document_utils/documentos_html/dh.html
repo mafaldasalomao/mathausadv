@@ -63,6 +63,7 @@
             text-align: center;
             border-bottom: 1px solid #000;
         }
+        
         .signatures {
             display: flex;
             justify-content: space-between;
@@ -113,6 +114,11 @@
             page-break-after: always; /* Força uma nova página após o elemento */
             border-bottom: 2px dashed green ; /* Linha visível na tela */
         }
+        hr {
+            border: 0.1px solid #616161 !important; /* Força a aplicação do estilo */
+            width: 100%;
+            margin: 10px 0;
+        }
 
         @media print {
             .page-break-after {
@@ -127,32 +133,18 @@
         <header class="header">
             <div class="logo">
                 <!-- Substitua o src pela URL da sua logo -->
-                <img src="Logo2.png" alt="Logo do Escritório">
+                <img src="https://cid-tec-bucket1-dev.s3.sa-east-1.amazonaws.com/Logo2.png" alt="Logo do Escritório">
             </div>
             <div class="info">
                 <p style="font-size: 14pt; margin-bottom: 20px;"><strong>DECLARAÇÃO DE HIPOSSUFICIÊNCIA</strong></p>
                 <p><strong>Folha proposta</strong></p>
-                <p><strong>Tipo:</strong> Avulso</p>
-                <p><strong>Origem:</strong> Sede</p>
-                <p>Data: 24/10/2024</p>
+                <p><strong>Tipo:</strong> {{ type }}</p>
+                <p><strong>Origem:</strong> {{ origin }}</p>
+                <p>Data: {{ date }}</p>
             </div>
         </header>
         <hr/>
-        <div class="two-columns">
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Declarante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Guilherme Gomes de Sousa</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
-
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Representante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Lúcia Maria Gomes Ferreira</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
-        </div>
+            {{ div_partes }}
         <hr/>
         <section>
             <p>Declaro, para os devidos fins, não ter condições de arcar com as custas e despesas processuais sem incorrer em prejuízo próprio ou de minha família, sendo pobre na acepção jurídica. 
@@ -161,14 +153,9 @@
             </P>
         </section>
 
-        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
-        <div class="two-columns">
-            <section class="signature">
-                <div class="line"></div> <!-- Linha visual para a assinatura -->
-                <p>Assin. Guilherme Gomes de Sousa</p>
-                
-            </section>
-        </div>
+        <p style="text-align: right;">Rio Branco – AC, {{ extense_date }}</p>
+        
+        {{ div_assinaturas }}
        
 
         <footer>

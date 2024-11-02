@@ -1,6 +1,11 @@
+from models.contract import ContractModel
 from flask_restful import Resource, reqparse, request
 from math import ceil
 from models.document import DocumentModel
+from resources.document_utils.documentos_html.formata_dados import (gerar_div_partes, gerar_div_assinaturas, gerar_lista_contatos)
+from resources.document_utils.documentos_html.html_to_pdf import gerar_documento
+from datetime import datetime
+from babel.dates import format_date
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 
@@ -27,34 +32,63 @@ class Documents(Resource):
     @jwt_required()
     def post(self):
         data = Document.parser.parse_args()
-        if data['name'] is None or data['service'] is None or data['fees'] is None or data['contratantes'] is None:
+        if (not data['document_type'] or
+            not data['service'] or
+            not data['fees'] or
+            not data['contract_id']):
             return {'message': 'Document not valid'}, 500
-        document = DocumentModel(**data)
+        #check if has parts on contract_id
+        contract = ContractModel.find_contract(data['contract_id'])
+        if not contract:
+            return {'message': 'Contract not found'}, 404
+        if not contract.clients:
+            return {'message': 'Contract has no clients'}, 500
+        
+        all_clients = []
+        non_responsible_clients = []
+        def add_client(client):
+            client.type = "Representante" if client.is_responsible else "Contratante"
+            if client not in all_clients:
+                all_clients.append(client)
+                if not client.is_responsible:
+                    non_responsible_clients.append(client)
 
-        for part in data['parts']:
-            if not part["name"] or not part["cpf"] or not part["address"] or not part["email"] or not part["phone"]:
-                return {'message': 'Document not valid'}, 500
+        for client in contract.clients:
+            add_client(client)
+            if client.responsible is not None:
+                add_client(client.responsible)
 
-        for part in data['representative']:
-            if not part["name"] or not part["cpf"] or not part["address"] or not part["email"] or not part["phone"]:
-                return {'message': 'Document not valid'}, 500
+
+        div_parts = gerar_div_partes(all_clients)
+        div_assinaturas = gerar_div_assinaturas(non_responsible_clients)
+        div_contatos = gerar_lista_contatos(non_responsible_clients)
+        
+        data.update({
+            'type': 'Avulso',
+            'origin': 'Sede',
+            'date': datetime.now().strftime("%d/%m/%Y"),
+            "extense_date": format_date(datetime.now(), format='long', locale='pt_BR'),
+            'div_contatos': div_contatos, 
+            'div_partes': div_parts,
+            'div_assinaturas': div_assinaturas
+        })
             
 
-        
+        gerar_documento(data['document_type'], data)
 
         try:
-            document.save_document() #document.document_id
+            print("ok")
+            # document.save_document() #document.document_id
         except:
             return {'message': 'An error occurred inserting the document'}, 500
-        return document.json(), 201
+        return contract.json(), 201
 class Document(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('name', type=str, required=True, help="The field 'name' cannot be left blank")
+    parser.add_argument('document_type', type=str, required=True, help="The field 'document_type' cannot be left blank")
     parser.add_argument('description', type=str, required=True, help="The field 'description' cannot be left blank")
     parser.add_argument('service', type=str, required=True, help="The field 'service' cannot be left blank")
-    parser.add_argument('fees', type=str, required=True, help="The field 'fees' cannot be left blank") #honorarios
-    parser.add_argument('parts', type=str, required=True, help="The field 'parts' cannot be left blank")
-    parser.add_argument('representative', type=str)
+    parser.add_argument('fees', type=str, required=True, help="The field 'fees' cannot be left blank")
+    parser.add_argument('contract_id', type=int, required=True, help="The field 'contract_id' cannot be left blank")
 
 
     def get(self, document_id):

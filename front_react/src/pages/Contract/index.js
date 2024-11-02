@@ -20,6 +20,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    Stack,
     Grid
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -223,10 +224,10 @@ const Contract = () => {
                                     {/* Coluna de Dados do Contratante */}
                                     <Grid item xs={4}>
                                         <ListItemText
-                                            primary={<>{part.name} - {part.signer_type}</>}
+                                            primary={<>{part.name} - Contratante</>}
                                             secondary={
                                                 <>
-                                                    <div>CPF: {part.cpf_cnpj}</div>
+                                                     <div>{part.cpf_cnpj.length === 11 ? "CPF" : "CNPJ"}: {part.cpf_cnpj}</div>
                                                     <div>Email: {part.email}</div>
                                                     <div>Telefone: {part.phone}</div>
                                                     <div>Endereço: {part.address}</div>
@@ -320,14 +321,33 @@ const Contract = () => {
                 )}
                 <ListItem>
                     {parts.length > 0 && (
+                        <Stack spacing={2}> {/* Adiciona espaçamento entre os botões */}
+                        
+                        <Button
+                            variant="outlined"
+                            startIcon={<AddIcon />}
+                            onClick={handleUploadDocument}
+                            className="button-add"
+                        >
+                            Gerar Contrato
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            startIcon={<AddIcon />}
+                            onClick={handleUploadDocument}
+                            className="button-add"
+                        >
+                            DH e Procuração
+                        </Button>
                         <Button
                             variant="outlined"
                             startIcon={<CloudUploadIcon />}
                             onClick={handleUploadDocument}
                             className="button-add"
                         >
-                            Enviar Novo Documento
+                            Upload Documento
                         </Button>
+                    </Stack>
                     )}
 
                 </ListItem>
