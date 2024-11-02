@@ -49,13 +49,10 @@ def gerar_div_assinaturas(assinaturas):
 def gerar_lista_contatos(partes):
     lista_contatos_html = ''
     for parte in partes:
-        # Define o tipo de documento como CPF ou CNPJ
-        label = "CNPJ" if len(parte.cpf_cnpj) > 11 else "CPF"
-        
+
         # Gera a linha de contato
         lista_contatos_html += f'''
-            <p>Contratante: {parte.name} - Email: {parte.email} - Telefone: {parte.phone}</p>
-            <p style="font-size: 8pt;">{label}: {parte.cpf_cnpj}</p>
+            <li>Contratante: {parte.name} - Email: {parte.email} - Telefone: {parte.phone}</li>
         '''
     
     return lista_contatos_html

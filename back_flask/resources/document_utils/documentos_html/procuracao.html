@@ -21,7 +21,19 @@
             text-align: center;
             text-transform: uppercase;
             font-size: 24px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            text-align: left;
+            font-size: 18px;
+            /* text-transform: uppercase;
+            
+            margin-bottom: 20px; */
+        }
+        li {
+            text-align: justify;
+            margin: 5px 0;
+            font-size: 14px;
         }
         p {
             text-align: justify;
@@ -40,11 +52,18 @@
             margin-top: 60px;
             font-size: 14px;
         }
+        .signature .signature-img {
+            display: block;
+            max-width: 150px;
+            margin-bottom: -60px;
+            margin: 0 auto;
+        }
         .signature .line {
-            margin-top: 40px;
+            margin-top: 63px;
             text-align: center;
             border-bottom: 1px solid #000;
         }
+        
         .signatures {
             display: flex;
             justify-content: space-between;
@@ -82,10 +101,31 @@
         }
         .two-columns section {
             width: 48%; /* Cada coluna ocupa cerca de metade da largura */
-            padding: 10px;
+            padding: 3px;
+            text-align: justify;
             /* box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); */
             /* border-radius: 5px; */
         }
+        .page-break {
+            page-break-before: always; /* Força uma nova página antes do elemento */
+        }
+
+        .page-break-after {
+            page-break-after: always; /* Força uma nova página após o elemento */
+            border-bottom: 2px dashed green ; /* Linha visível na tela */
+        }
+        hr {
+            border: 0.1px solid #616161 !important; /* Força a aplicação do estilo */
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        @media print {
+            .page-break-after {
+                border-bottom: none; /* Remove a linha na impressão */
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -93,34 +133,22 @@
         <header class="header">
             <div class="logo">
                 <!-- Substitua o src pela URL da sua logo -->
-                <img src="Logo2.png" alt="Logo do Escritório">
+                <img src="https://cid-tec-bucket1-dev.s3.sa-east-1.amazonaws.com/Logo2.png" alt="Logo do Escritório">
             </div>
             <div class="info">
-                <p style="font-size: 14pt;"><strong>PROCURAÇÃO</strong></p>
+                <p style="font-size: 14pt; margin-bottom: 20px;"><strong>PROCURAÇÃO</strong></p>
                 <p><strong>Folha proposta</strong></p>
-                <p><strong>Tipo:</strong> Avulso</p>
-                <p><strong>Origem:</strong> Sede</p>
-                <p>Data: 24/10/2024</p>
+                <p><strong>Tipo:</strong> {{ type }}</p>
+                <p><strong>Origem:</strong> {{ origin }}</p>
+                <p>Data: {{ date }}</p>
             </div>
         </header>
         <hr/>
 
 
-        <div class="two-columns">
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Outorgante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Guilherme Gomes de Sousa</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
+        {{ div_partes }}
 
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Representante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Lúcia Maria Gomes Ferreira</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
-        </div>
+
         <hr/>
         <section>
             <h2><strong>Outorgado(s)</strong></h2>
@@ -130,19 +158,13 @@
         <section>
             <h2><strong>Poderes</strong></h2>
             <p>Para em qualquer Juízo ou Tribunal, comum ou especial, administrativo ou judicial, bem como em órgão da administração pública direta ou indireta, federal, estadual ou municipal, independentemente da ordem de sucessão, com amplos e gerais poderes para o foro, inclusive os de cláusula ad e extra-judicia, previstos no art. 38 do CPC e art. 5° do Estatuto da Ordem dos Advogados do Brasil, alegar todo o direito e defesa do(s) outorgante(s), bem como situações de fato (como hipossuficiência), seja como autor(es), réu(s), ou interveniente(s); Confessar, transigir e desistir; Reconhecer a procedência do pedido e renunciar direitos; Receber ou dar quitação; Firmar compromisso; Representação em inventário e partilha extrajudicial, podendo firmar escritura pública, indicar e complementar bens a partilhar; Específicos para levantar valores utilizando-se de alvarás judiciais em nome do outorgante, nos processos em que atuam; Substabelecer, com ou sem reserva de poderes.</p>
-            <p>Rio Branco – AC, 24 de outubro de 2024.</p>
+            <p style="text-align: right;">Rio Branco – AC, {{ extense_date }}</p>
         </section>
-        <div class="two-columns">
-            <section class="signature">
-            <div class="line"></div> <!-- Linha visual para a assinatura -->
-            <p>Assin. Guilherme Gomes de Sousa</p>
-        </section>
-        </div>
         
+        
+        {{ div_assinaturas }}
 
-        <footer>
-            <p class="highlight">V.1.0 – 19/03/2024</p>
-        </footer>
+
     </div>
 </body>
 </html>

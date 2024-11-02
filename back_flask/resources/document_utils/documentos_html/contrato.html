@@ -21,7 +21,7 @@
             text-align: center;
             text-transform: uppercase;
             font-size: 24px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         h2 {
             text-align: left;
@@ -63,6 +63,7 @@
             text-align: center;
             border-bottom: 1px solid #000;
         }
+        
         .signatures {
             display: flex;
             justify-content: space-between;
@@ -100,7 +101,7 @@
         }
         .two-columns section {
             width: 48%; /* Cada coluna ocupa cerca de metade da largura */
-            padding: 10px;
+            padding: 3px;
             text-align: justify;
             /* box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); */
             /* border-radius: 5px; */
@@ -112,6 +113,11 @@
         .page-break-after {
             page-break-after: always; /* Força uma nova página após o elemento */
             border-bottom: 2px dashed green ; /* Linha visível na tela */
+        }
+        hr {
+            border: 0.1px solid #616161 !important; /* Força a aplicação do estilo */
+            width: 100%;
+            margin: 5px 0;
         }
 
         @media print {
@@ -127,34 +133,22 @@
         <header class="header">
             <div class="logo">
                 <!-- Substitua o src pela URL da sua logo -->
-                <img src="Logo2.png" alt="Logo do Escritório">
+                <img src="https://cid-tec-bucket1-dev.s3.sa-east-1.amazonaws.com/Logo2.png" alt="Logo do Escritório">
             </div>
             <div class="info">
                 <p style="font-size: 14pt; margin-bottom: 20px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS JURÍDICOS</strong></p>
                 <p><strong>Folha proposta</strong></p>
-                <p><strong>Tipo:</strong> Avulso</p>
-                <p><strong>Origem:</strong> Sede</p>
-                <p>Data: 24/10/2024</p>
+                <p><strong>Tipo:</strong> {{ type }}</p>
+                <p><strong>Origem:</strong> {{ origin }}</p>
+                <p>Data: {{ date }}</p>
             </div>
         </header>
         <hr/>
 
         <h2>1 – Dados dos Contratantes</h2>
-        <div class="two-columns">
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Outorgante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Guilherme Gomes de Sousa</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
 
-            <section>
-                <p style="font-size: 12pt; margin-bottom: -10px;">Representante</p>
-                <span style="font-size: 8pt;">CPF: 322.467.572-15</span>
-                <p><strong>Lúcia Maria Gomes Ferreira</strong></p>
-                <p>Rua Maria Francisca Medeiros, 174, Residencial Calafate II, Bl. A1, Apt. 202, 69914316, Rio Branco, Acre</p>
-            </section>
-        </div>
+        {{ div_partes }}
+
         <hr/>
         <section>
             <h2>2 – Serviço(s)</h2>
@@ -168,23 +162,15 @@
 
         <section>
             <h2>4 – Contato</h2>
-            {{ div_contatos }}
-        </section>
-        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
-        <div class="two-columns">
-            <section class="signature">
-                <div class="line"></div> <!-- Linha visual para a assinatura -->
-                <p> Assin.Daniel Mathaus Costa de Macêdo</p>
-                <p>Contratante 1</p>
-            </section>
-            <section class="signature">
-                <img src="signature_daniel.png" alt="Assinatura" class="signature-img">
-                <div class="line" style="margin-top: -10px;"></div> <!-- Linha visual para a assinatura -->
-                <p>Daniel Mathaus Costa de Macêdo</p>
-                <p>OAB/AC 4.355</p>
-            </section>
+            <ul>
+                {{ div_contatos }}
+            </ul>
             
-        </div>
+        </section>
+        <p style="text-align: right;">Rio Branco – AC, {{ extense_date }}</p>
+
+
+        {{ div_assinaturas }}
        
 
         
@@ -352,22 +338,10 @@
             <p>Por estarem assim justos e contratados e, de comum acordo, aceitarem as condições deste Contrato, o assinam, de modo a garantir os seus jurídicos e legais efeitos.</p>
         </section>
 
-        <p style="text-align: right;">Rio Branco – AC, 24 de outubro de 2024.</p>
-        <div class="two-columns">
-            <section class="signature">
-                <div class="line"></div> <!-- Linha visual para a assinatura -->
-                <p>Assin. Daniel Mathaus Costa de Macêdo</p>
-                <p>Contratante 1</p>
-            </section>
-            <section class="signature">
-                <div class="line"></div> <!-- Linha visual para a assinatura -->
-                <p>Daniel Mathaus Costa de Macêdo</p>
-                <p>OAB/AC 4.355</p>
-            </section>
-        </div>
-        <footer>
-            <p class="highlight">V.1.0 – 19/03/2024</p>
-        </footer>
+        <p style="text-align: right;">Rio Branco – AC, {{ extense_date }}</p>
+
+        {{ div_assinaturas }}
+
     </div>
 </body>
 </html>
