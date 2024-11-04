@@ -95,9 +95,7 @@ const NewEditDocument = () => {
 
   return (
     <Container className="container">
-      <Typography variant="h4" gutterBottom className="title">
-        Gerar Documentos Principais
-      </Typography>
+      
 
 
       {loading ? (
@@ -109,6 +107,9 @@ const NewEditDocument = () => {
         </Box>
       ) : (
         <>
+        <Typography variant="h4" gutterBottom className="title">
+          Gerar Documentos Principais
+        </Typography>
           <Typography variant="h6" gutterBottom className="subtitle">
             Dados do Documento
           </Typography>
