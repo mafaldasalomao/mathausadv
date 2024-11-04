@@ -9,7 +9,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "mathausadv-documentos-d71d906e52
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-SERVICE_ACCOUNT_FILE = 'resources\document_utils\mathausadv-documentos-d71d906e524e.json'
+SERVICE_ACCOUNT_FILE = 'resources/document_utils/mathausadv-documentos-d71d906e524e.json'
 # Autenticação com a conta de serviço
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE,
