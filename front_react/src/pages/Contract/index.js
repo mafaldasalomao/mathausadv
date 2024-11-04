@@ -329,13 +329,8 @@ const Contract = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Nome</TableCell>
-                        <TableCell>Descrição</TableCell>
-                        <TableCell>Assine Online ID</TableCell>
                         <TableCell>Google Drive ID</TableCell>
                         <TableCell>Data de Assinatura</TableCell>
-                        <TableCell>Honorários</TableCell>
-                        <TableCell>Serviço</TableCell>
-                        <TableCell>ID do Contrato</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -343,13 +338,8 @@ const Contract = () => {
                         documents.map((document, index) => (
                             <TableRow key={index}>
                                 <TableCell>{document.name}</TableCell>
-                                <TableCell>{document.description}</TableCell>
-                                <TableCell>{document.assine_online_id}</TableCell>
                                 <TableCell>{document.gdrive_id}</TableCell>
                                 <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
-                                <TableCell>{document.fees}</TableCell>
-                                <TableCell>{document.service}</TableCell>
-                                <TableCell>{document.contract_id}</TableCell>
                             </TableRow>
                         ))
                     ) : (
