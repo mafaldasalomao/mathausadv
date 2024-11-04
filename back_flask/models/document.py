@@ -6,18 +6,16 @@ class DocumentModel(db.Model):
 
     document_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    description = db.Column(db.String(80), nullable=True)
-    fees = db.Column(db.String(80), nullable=True)
-    service = db.Column(db.String(80), nullable=True)
+    fees = db.Column(db.Text, nullable=True)
+    service = db.Column(db.Text, nullable=True)
     assine_online_id = db.Column(db.String(120), nullable=True)
     gdrive_id = db.Column(db.String(120), nullable=True)
     generated_at =  db.Column(db.DateTime, default=datetime.utcnow)
     signed_at = db.Column(db.DateTime, nullable=True)
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
 
-    def __init__(self, name, description, assine_online_id, gdrive_id, signed_at, fees, service, contract_id):
+    def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, service, contract_id):
         self.name = name
-        self.description = description
         self.assine_online_id = assine_online_id
         self.gdrive_id = gdrive_id
         self.signed_at = signed_at
@@ -29,9 +27,9 @@ class DocumentModel(db.Model):
         document_json = {
             'document_id': self.document_id,
             'name': self.name,
-            'description': self.description,
             'fees': self.fees,
             'service': self.service,
+            'signed_at': self.signed_at.isoformat() if self.signed_at else None,
             'assine_online_id': self.assine_online_id,
             'gdrive_id': self.gdrive_id,
             'contract_id': self.contract_id
@@ -62,9 +60,8 @@ class DocumentModel(db.Model):
         db.session.commit()
         return True
 
-    def update_document(self, name, description, assine_online_id,gdrive_id, signed_at,fees, service):
+    def update_document(self, name, assine_online_id, gdrive_id, signed_at,fees, service):
         self.name = name
-        self.description = description
         self.assine_online_id = assine_online_id
         self.gdrive_id = gdrive_id
         self.signed_at = signed_at

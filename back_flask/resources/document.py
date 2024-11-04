@@ -73,15 +73,25 @@ class Documents(Resource):
             'div_assinaturas': div_assinaturas
         })
             
-
-        gerar_documento(data['document_type'], data, contract.drive_folder_id)
-
+        
+        file_id = gerar_documento(data['document_type'], data, contract.drive_folder_id)
+        document = {
+                    'name': data['document_type'].capitalize(),
+                    'service': data['service'],
+                    'fees': data['fees'],
+                    'contract_id': contract.contract_id,
+                    'signed_at': None,
+                    'assine_online_id': None,
+                    'gdrive_id': file_id
+                }
+        document = DocumentModel(**document)
+        
+        
         try:
-            print("ok")
-            # document.save_document() #document.document_id
-        except:
-            return {'message': 'An error occurred inserting the document'}, 500
-        return contract.json(), 201
+            document.save_document()
+        except Exception as e:
+            return {'message': e}, 500
+        return document.json(), 201
 class Document(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('document_type', type=str, required=True, help="The field 'document_type' cannot be left blank")

@@ -43,8 +43,10 @@ def gerar_documento(document_type, data, drive_folder_id):
             }
         )
     if os.path.exists(pdf_path):
-        upload_to_google_drive(pdf_path, f"{document_type.lower()}", drive_folder_id)
+        file_id = upload_to_google_drive(pdf_path, f"{document_type.lower()}", drive_folder_id)
         print(f"{document_type} gerado com sucesso: {pdf_path}")
         os.remove(pdf_path)
+        return file_id
     else:
         print(f"Erro ao gerar {document_type}")
+    return None
