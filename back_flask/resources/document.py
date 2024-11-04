@@ -74,7 +74,7 @@ class Documents(Resource):
         })
             
 
-        gerar_documento(data['document_type'], data)
+        gerar_documento(data['document_type'], data, contract.drive_folder_id)
 
         try:
             print("ok")

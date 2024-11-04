@@ -4,7 +4,7 @@ from sqlalchemy import desc
 from models.contract import ContractModel
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
-from resources.document_utils.drive_utils import create_folder
+from resources.document_utils.documentos_html.drive_utils import create_folder
 import time
 
 class Contracts(Resource):

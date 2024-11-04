@@ -7,9 +7,11 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "mathausadv-documentos-d71d906e52
 
 
 from google.oauth2 import service_account
+from googleapiclient.http import MediaFileUpload
 from googleapiclient.discovery import build
 
-SERVICE_ACCOUNT_FILE = 'resources/document_utils/mathausadv-documentos-d71d906e524e.json'
+SERVICE_ACCOUNT_FILE = 'resources/document_utils/documentos_html/mathausadv-documentos-d71d906e524e.json'
+SCOPES = ['https://www.googleapis.com/auth/drive.file']
 # Autenticação com a conta de serviço
 creds = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE,
@@ -51,3 +53,20 @@ def create_folder(folder_name, parent_folder_id):
     print(f'Pasta "{folder_name}" criada com ID: {folder.get("id")}')
     return folder.get('id')
 
+def upload_to_google_drive(file_path, document_type, parent_folder_id):
+    # Autenticação com as credenciais da conta de serviço
+    creds = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    service = build('drive', 'v3', credentials=creds)
+    
+    # Metadados do arquivo
+    file_metadata = {
+        'name': f"{document_type}.pdf",
+        'parents': [parent_folder_id]  # Coloque o ID da pasta de destino
+    }
+    media = MediaFileUpload(file_path, mimetype='application/pdf')
+    
+    # Envio do arquivo
+    file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+    print(f"Arquivo enviado ao Google Drive com ID: {file.get('id')}")
+    return file.get('id')
