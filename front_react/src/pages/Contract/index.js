@@ -94,32 +94,25 @@ const Contract = () => {
     };
 
 
-    const sendDocument = async (type) => {
-        try {
-            const formData = new FormData();
-            formData.append('service', 'vazio');
-            formData.append('fees', 'vazio');
-            formData.append('description', 'vazio');
-            formData.append('document_type', type);
-            formData.append('contract_id', contract_id);
-            const response = await apiPrivate.post('/documents', formData, {
-                withCredentials: true
-            });
-            setDocuments([...documents, response.data]);
-        } catch (error) {        
-            console.error('Erro ao enviar o documento:', error);
-        }
+    // const sendDocument = async (type) => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append('service', 'vazio');
+    //         formData.append('fees', 'vazio');
+    //         formData.append('description', 'vazio');
+    //         formData.append('document_type', type);
+    //         formData.append('contract_id', contract_id);
+    //         const response = await apiPrivate.post('/documents', formData, {
+    //             withCredentials: true
+    //         });
+    //         setDocuments([...documents, response.data]);
+    //     } catch (error) {        
+    //         console.error('Erro ao enviar o documento:', error);
+    //     }
 
-    }
-    const handleUploadDocument = (type) => {
-        if (type === 'contrato') {
-            navigate(`documents/new?type=${type}`);
-        }
-        if (type === 'procuracao') {
-            sendDocument(type);
-            sendDocument("dh");
-        }
-        console.log('Enviar novo documento');
+    // }
+    const handleUploadDocument = () => {
+        navigate("documents/new");
     };
 
     const areFieldsFilled = () => {
@@ -378,27 +371,27 @@ const Contract = () => {
                         <Button
                             variant="outlined"
                             startIcon={<AddIcon />}
-                            onClick={() =>handleUploadDocument('contrato')}
+                            onClick={() =>handleUploadDocument()}
                             className="button-add"
                         >
-                            Gerar Contrato
+                            Gerar Documentos
                         </Button>
-                        <Button
+                        {/* <Button
                             variant="outlined"
                             startIcon={<AddIcon />}
                             onClick={() =>handleUploadDocument('procuracao')}
                             className="button-add"
                         >
                             DH e Procuração
-                        </Button>
-                        <Button
+                        </Button> */}
+                        {/* <Button
                             variant="outlined"
                             startIcon={<CloudUploadIcon />}
                             onClick={handleUploadDocument}
                             className="button-add"
                         >
                             Upload Documento
-                        </Button>
+                        </Button> */}
                     </Stack>
                     )}
 
