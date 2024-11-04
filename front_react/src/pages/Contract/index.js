@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DriveIcon from '@mui/icons-material/DriveFileMove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Divider } from '@mui/material'
 import './styles.css';
@@ -143,8 +144,8 @@ const Contract = () => {
         });
         try {
             if (!client_id) {
-            await apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
-            setParts((prev) => [...prev, novoContratante]);
+                await apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
+                setParts((prev) => [...prev, novoContratante]);
             } else {
                 await apiPrivate.post(`/contract/${contract_id}/client/${client_id}/responsable`, novoContratante);
                 await fetchContractDetails()
@@ -194,7 +195,7 @@ const Contract = () => {
                             confirmButtonColor: 'var(--orange)',
                             confirmButtonText: 'OK'
                         });
-                        
+
                     } else {
                         loadingSwal.close();
                         Swal.fire({
@@ -206,7 +207,7 @@ const Contract = () => {
                     }
                 }
             }).catch((error) => {
-                
+
                 Swal.fire({
                     title: 'Ocorreu um erro ao excluir o contratante.',
                     icon: 'error',
@@ -244,7 +245,7 @@ const Contract = () => {
                                             primary={<>{part.name} - Contratante</>}
                                             secondary={
                                                 <>
-                                                     <div>{part.cpf_cnpj.length === 11 ? "CPF" : "CNPJ"}: {part.cpf_cnpj}</div>
+                                                    <div>{part.cpf_cnpj.length === 11 ? "CPF" : "CNPJ"}: {part.cpf_cnpj}</div>
                                                     <div>Email: {part.email}</div>
                                                     <div>Telefone: {part.phone}</div>
                                                     <div>Endereço: {part.address}</div>
@@ -278,15 +279,15 @@ const Contract = () => {
                                     <Grid item xs={4} style={{ textAlign: 'right' }}>
                                         {!part.responsible && (
                                             <Button
-                                            variant="outlined"
-                                            startIcon={<AddIcon />}
-                                            onClick={() => handleAddPart(part.client_id)}
-                                            className="button-add"
-                                        >
-                                            Responsável
-                                        </Button>
+                                                variant="outlined"
+                                                startIcon={<AddIcon />}
+                                                onClick={() => handleAddPart(part.client_id)}
+                                                className="button-add"
+                                            >
+                                                Responsável
+                                            </Button>
                                         )}
-                                        
+
                                         <Button
                                             variant="outlined"
                                             color="secondary"
@@ -311,7 +312,7 @@ const Contract = () => {
                     <Button
                         variant="outlined"
                         startIcon={<AddIcon />}
-                        onClick={() =>handleAddPart(null)}
+                        onClick={() => handleAddPart(null)}
                         className="button-add"
                     >
                         Novo Contratante
@@ -324,65 +325,63 @@ const Contract = () => {
                 Documentos
             </Typography>
             <List component={Paper}>
-            <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Nome</TableCell>
-                        <TableCell>Google Drive ID</TableCell>
-                        <TableCell>Data de Assinatura</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {documents.length > 0 ? (
-                        documents.map((document, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{document.name}</TableCell>
-                                <TableCell>{document.gdrive_id}</TableCell>
-                                <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Nome</TableCell>
+                                <TableCell>Google Drive</TableCell>
+                                <TableCell>Data de Assinatura</TableCell>
                             </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={8} align="center">
-                                <Typography variant="body2" style={{ padding: '16px' }}>
-                                    Nenhum documento cadastrado.
-                                </Typography>
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {documents.length > 0 ? (
+                                documents.map((document, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{document.name}</TableCell>
+                                        <TableCell>
+                                            <a href={`https://drive.google.com/uc?id=${document.gdrive_id}`} target="_blank" rel="noopener noreferrer">
+                                                <DriveIcon />
+                                            </a>
+                                        </TableCell>
+                                        <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={8} align="center">
+                                        <Typography variant="body2" style={{ padding: '16px' }}>
+                                            Nenhum documento cadastrado.
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
                 <ListItem>
                     {parts.length > 0 && (
                         <Stack spacing={2}> {/* Adiciona espaçamento entre os botões */}
-                        
-                        <Button
-                            variant="outlined"
-                            startIcon={<AddIcon />}
-                            onClick={() =>handleUploadDocument()}
-                            className="button-add"
-                        >
-                            Gerar Documentos
-                        </Button>
-                        {/* <Button
-                            variant="outlined"
-                            startIcon={<AddIcon />}
-                            onClick={() =>handleUploadDocument('procuracao')}
-                            className="button-add"
-                        >
-                            DH e Procuração
-                        </Button> */}
-                        {/* <Button
-                            variant="outlined"
-                            startIcon={<CloudUploadIcon />}
-                            onClick={handleUploadDocument}
-                            className="button-add"
-                        >
-                            Upload Documento
-                        </Button> */}
-                    </Stack>
+                            {contract.documents && contract.documents.length > 0 ? (
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => handleUploadDocument()}
+                                    className="button-add"
+                                >
+                                    Gerar Novamente
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<AddIcon />}
+                                    onClick={() => handleUploadDocument()}
+                                    className="button-add"
+                                >
+                                    Gerar Documentos
+                                </Button>
+                            )}
+                        </Stack>
                     )}
 
                 </ListItem>
