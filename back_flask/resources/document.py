@@ -81,14 +81,14 @@ class Documents(Resource):
         })
             
         
-        file_id = gerar_documento(data['document_type'], data, contract.drive_folder_id)
+        file_id, assine_online_id = gerar_documento(data['document_type'], data, contract.drive_folder_id)
         document = {
                     'name': data['document_type'].capitalize(),
                     'service': data['service'],
                     'fees': data['fees'],
                     'contract_id': contract.contract_id,
                     'signed_at': None,
-                    'assine_online_id': None,
+                    'assine_online_id': assine_online_id,
                     'gdrive_id': file_id
                 }
         document = DocumentModel(**document)

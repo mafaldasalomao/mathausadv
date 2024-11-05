@@ -2,7 +2,7 @@ from weasyprint import HTML
 import os
 from jinja2 import Environment, FileSystemLoader
 import tempfile
-from resources.document_utils.documentos_html.drive_utils import upload_to_google_drive
+from resources.document_utils.documentos_html.drive_utils import upload_to_google_drive, upload_to_assine_online
 # Caminho para o diretório dos templates
 # Define o diretório do template usando um caminho absoluto
 template_dir = os.path.abspath('./resources/document_utils/documentos_html')
@@ -44,9 +44,10 @@ def gerar_documento(document_type, data, drive_folder_id):
         )
     if os.path.exists(pdf_path):
         file_id = upload_to_google_drive(pdf_path, f"{document_type.lower()}", drive_folder_id)
+        assine_online_id = upload_to_assine_online(pdf_path, f"{document_type.lower()}")
         print(f"{document_type} gerado com sucesso: {pdf_path}")
         os.remove(pdf_path)
-        return file_id
+        return file_id, assine_online_id
     else:
         print(f"Erro ao gerar {document_type}")
     return None

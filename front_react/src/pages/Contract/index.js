@@ -22,7 +22,7 @@ import {
     Grid
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CreateIcon from '@mui/icons-material/Create';
 import DriveIcon from '@mui/icons-material/DriveFileMove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Divider } from '@mui/material'
@@ -332,6 +332,7 @@ const Contract = () => {
                                 <TableCell>Nome</TableCell>
                                 <TableCell>Google Drive</TableCell>
                                 <TableCell>Data de Assinatura</TableCell>
+                                <TableCell>Assine Online</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -345,6 +346,7 @@ const Contract = () => {
                                             </a>
                                         </TableCell>
                                         <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
+                                        <TableCell>{document.assine_online_id || 'Não assinada'}</TableCell>
                                     </TableRow>
                                 ))
                             ) : (
@@ -374,7 +376,7 @@ const Contract = () => {
                                     </Button>
                                     <Button
                                         variant="outlined"
-                                        startIcon={<AddIcon />}
+                                        startIcon={<CreateIcon />}
                                         onClick={() => handleUploadDocument()}
                                         className="button-add"
                                     >

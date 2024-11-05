@@ -2,6 +2,7 @@
 from __future__ import print_function
 import os.path
 import os
+import requests
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "mathausadv-documentos-d71d906e524e.json"
 
 
@@ -85,3 +86,32 @@ def delete_document_google_drive(file_id):
         print(f"Documento com ID {file_id} deletado com sucesso.")
     except Exception as e:
         print(f"Erro ao deletar o documento: {e}")
+
+
+def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+    url = "https://api.assine.online/v1/file"
+    
+    # Abre o arquivo e define os parâmetros para envio
+    with open(file_path, 'rb') as file:
+        files = {
+            'file': (f"{document_type.lower()}.pdf", file, 'application/pdf')
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {token}'
+        }
+        payload = {
+            'decription': f"{document_type.lower()}.pdf"
+        }
+        
+        try:
+            # Envia o arquivo para a API
+            response = requests.post(url, headers=headers, files=files, data=payload)
+            response.raise_for_status()  # Lança uma exceção para status de erro HTTP
+            
+            # Retorna o ID do arquivo, assumindo que a resposta inclui um campo 'file_id'
+            return response.json().get("id", "ID not found in response")
+        
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred: {e}")
+            return None

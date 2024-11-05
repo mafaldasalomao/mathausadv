@@ -77,3 +77,16 @@ class Contract(Resource):
             else:
                 return {'message': 'Cannot delete contract'}, 400
         return {'message': 'Contract not found'}, 404
+    
+
+class SendToSigner(Resource):
+    @jwt_required()
+    def post(self, contract_id):
+        contract = ContractModel.find_document(contract_id)
+        
+        if not contract:
+            return {'message': 'Contract not found'}, 404
+        if not contract.clients or not contract.documents:
+            return {'message': 'Contract has no clients or documents'}, 500
+        
+        
