@@ -363,14 +363,24 @@ const Contract = () => {
                     {parts.length > 0 && (
                         <Stack spacing={2}> {/* Adiciona espaçamento entre os botões */}
                             {contract.documents && contract.documents.length > 0 ? (
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<AddIcon />}
-                                    onClick={() => handleUploadDocument()}
-                                    className="button-add"
-                                >
-                                    Gerar Novamente
-                                </Button>
+                                <>
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<AddIcon />}
+                                        onClick={() => handleUploadDocument()}
+                                        className="button-add"
+                                    >
+                                        Gerar Novamente
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<AddIcon />}
+                                        onClick={() => handleUploadDocument()}
+                                        className="button-add"
+                                    >
+                                        Enviar para Assinatura
+                                    </Button>
+                                </>
                             ) : (
                                 <Button
                                     variant="outlined"
