@@ -70,3 +70,18 @@ def upload_to_google_drive(file_path, document_type, parent_folder_id):
     file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
     print(f"Arquivo enviado ao Google Drive com ID: {file.get('id')}")
     return file.get('id')
+
+
+def delete_document_google_drive(file_id):
+    # Autenticação com as credenciais da conta de serviço
+    creds = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+    )
+    service = build('drive', 'v3', credentials=creds)
+    
+    try:
+        # Deletar o arquivo pelo ID
+        service.files().delete(fileId=file_id).execute()
+        print(f"Documento com ID {file_id} deletado com sucesso.")
+    except Exception as e:
+        print(f"Erro ao deletar o documento: {e}")

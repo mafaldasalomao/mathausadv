@@ -4,6 +4,7 @@ from math import ceil
 from models.document import DocumentModel
 from resources.document_utils.documentos_html.formata_dados import (gerar_div_partes, gerar_div_assinaturas, gerar_lista_contatos)
 from resources.document_utils.documentos_html.html_to_pdf import gerar_documento
+from resources.document_utils.documentos_html.drive_utils import delete_document_google_drive
 from datetime import datetime
 from babel.dates import format_date
 from flask_jwt_extended import jwt_required
@@ -43,6 +44,12 @@ class Documents(Resource):
             return {'message': 'Contract not found'}, 404
         if not contract.clients:
             return {'message': 'Contract has no clients'}, 500
+        
+        if contract.documents:
+            for document in contract.documents:
+                if document.name.lower() == data['document_type'].lower():
+                    delete_document_google_drive(document.gdrive_id)
+                    document.delete_document()
         
         all_clients = []
         non_responsible_clients = []
