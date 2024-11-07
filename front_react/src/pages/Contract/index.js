@@ -39,6 +39,8 @@ const Contract = () => {
     const [parts, setParts] = useState([]);
     const [documents, setDocuments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showProgress, setShowProgress] = useState(false);
+    const [currentDocument, setCurrentDocument] = useState('');
     const [open, setOpen] = useState(false);
 
     const [novoContratante, setNovoContratante] = useState({
@@ -94,26 +96,65 @@ const Contract = () => {
         }));
     };
 
-
-    // const sendDocument = async (type) => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append('service', 'vazio');
-    //         formData.append('fees', 'vazio');
-    //         formData.append('description', 'vazio');
-    //         formData.append('document_type', type);
-    //         formData.append('contract_id', contract_id);
-    //         const response = await apiPrivate.post('/documents', formData, {
-    //             withCredentials: true
-    //         });
-    //         setDocuments([...documents, response.data]);
-    //     } catch (error) {        
-    //         console.error('Erro ao enviar o documento:', error);
-    //     }
-
-    // }
     const handleUploadDocument = () => {
         navigate("documents/new");
+    };
+
+    const handleDeleteAllDocuments = async () => {
+        try {
+            // Confirmação inicial do usuário
+            const result = await Swal.fire({
+                title: 'Deseja deletar todos os documentos?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--orange)',
+                cancelButtonColor: 'var(--deep-black)',
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Cancelar'
+            });
+    
+            if (result.isConfirmed) {
+                // Mostra a mensagem e o indicador de progresso
+                const progressContainer = document.getElementById('progressContainer');
+                setShowProgress(true);
+    
+                // Deleta os documentos um por um
+                for (const [index, document] of documents.entries()) {
+                    setCurrentDocument(`Deletando documento ${index + 1} de ${documents.length}`);
+    
+                    try {
+                        await apiPrivate.delete(`/document/${document.document_id}`, {
+                            headers: { 'Content-Type': 'application/json' },
+                            withCredentials: true
+                        });
+                    } catch (error) {
+                        console.error(`Erro ao deletar o documento ${document.id}:`, error);
+                    }
+                }
+    
+                // Atualiza a lista de documentos no estado
+                setDocuments([]);
+                setShowProgress(false); // Esconde o indicador de progresso após a exclusão
+    
+                // Exibe uma mensagem de sucesso
+                Swal.fire({
+                    title: 'Documentos deletados com sucesso!',
+                    icon: 'success',
+                    confirmButtonColor: 'var(--orange)',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        } catch (error) {
+            console.error('Erro ao deletar os documentos:', error);
+    
+            // Exibe uma mensagem de erro
+            Swal.fire({
+                title: 'Ocorreu um erro ao deletar os documentos.',
+                icon: 'error',
+                confirmButtonColor: 'var(--orange)',
+                confirmButtonText: 'Ok'
+            });
+        }
     };
 
     const areFieldsFilled = () => {
@@ -145,10 +186,10 @@ const Contract = () => {
         try {
             if (!client_id) {
                 await apiPrivate.post(`/contract/${contract_id}/clients`, novoContratante);
-                setParts((prev) => [...prev, novoContratante]);
+                await fetchContractDetails();
             } else {
                 await apiPrivate.post(`/contract/${contract_id}/client/${client_id}/responsable`, novoContratante);
-                await fetchContractDetails()
+                await fetchContractDetails();
             }
             loadingSwal.close();
         } catch (error) {
@@ -324,6 +365,15 @@ const Contract = () => {
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
                 Documentos
             </Typography>
+            {showProgress && (
+                <Box display="flex" alignItems="center" mt={2}>
+                    <CircularProgress size={24} color="primary" />
+                    <Typography variant="body2" style={{ marginLeft: '8px' }}>
+                        {currentDocument}
+                    </Typography>
+                </Box>
+            )}
+            
             <List component={Paper}>
                 <TableContainer component={Paper}>
                     <Table>
@@ -363,20 +413,30 @@ const Contract = () => {
                 </TableContainer>
                 <ListItem>
                     {parts.length > 0 && (
-                        <Stack spacing={2}> {/* Adiciona espaçamento entre os botões */}
+                        <Stack spacing={1}> {/* Adiciona espaçamento entre os botões */}
                             {contract.documents && contract.documents.length > 0 ? (
                                 <>
-                                    <Button
+                                    {/* <Button
                                         variant="outlined"
                                         startIcon={<AddIcon />}
                                         onClick={() => handleUploadDocument()}
                                         className="button-add"
                                     >
                                         Gerar Novamente
+                                    </Button> */}
+                                    
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => handleDeleteAllDocuments()}
+                                        style={{ margin: '10px', backgroundColor: 'var(--dark-orange)', color: '#fff', textAlign: 'right' }}
+                                    >
+                                        Deletar Todos Documentos
                                     </Button>
                                     <Button
                                         variant="outlined"
                                         startIcon={<CreateIcon />}
+                                        style={{ margin: '10px', color: '#fff', textAlign: 'right' }}
                                         onClick={() => handleUploadDocument()}
                                         className="button-add"
                                     >

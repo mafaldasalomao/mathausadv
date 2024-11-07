@@ -118,7 +118,9 @@ class Document(Resource):
     @jwt_required()
     def delete(self, document_id):
         document = DocumentModel.find_document(document_id)
+        
         if document:
+            delete_document_google_drive(document.gdrive_id)
             if document.delete_document():
                 return {'message': 'Document deleted'}
             else:

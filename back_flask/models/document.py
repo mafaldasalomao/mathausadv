@@ -1,5 +1,6 @@
 from sql_alchemy import db
 from datetime import datetime
+from sqlalchemy.orm import relationship, backref
 # from models.product import ProductModel
 class DocumentModel(db.Model):
     __tablename__ = 'document'
@@ -13,6 +14,8 @@ class DocumentModel(db.Model):
     generated_at =  db.Column(db.DateTime, default=datetime.utcnow)
     signed_at = db.Column(db.DateTime, nullable=True)
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
+
+    client_signatures = relationship('DocumentClientSign', backref='document', cascade='all, delete')
 
     def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, service, contract_id):
         self.name = name

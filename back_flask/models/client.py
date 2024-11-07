@@ -1,5 +1,6 @@
 from sql_alchemy import db
 from sqlalchemy import Boolean
+from sqlalchemy.orm import relationship, backref
 class ClientModel(db.Model):
     __tablename__ = 'client'
 
@@ -13,7 +14,8 @@ class ClientModel(db.Model):
     responsible_id = db.Column(db.Integer, db.ForeignKey('client.client_id', ondelete='SET NULL'), nullable=True)
     responsible = db.relationship('ClientModel', remote_side=[client_id],  backref=db.backref('dependents', cascade='all, delete', passive_deletes=True))
     contract_id = db.Column(db.Integer, db.ForeignKey('contract.contract_id'))
-    
+    document_signatures = relationship('DocumentClientSign', backref='client', cascade='all, delete')
+
     def __init__(self, name, cpf_cnpj, address, email, phone, contract_id, is_responsible=False, responsible_id=None):
         self.name = name
         self.cpf_cnpj = cpf_cnpj
