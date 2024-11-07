@@ -94,12 +94,23 @@ class Documents(Resource):
                 }
         document = DocumentModel(**document)
         
-        for assinatura in assinaturas:
-            assinatura.document_id = document.document_id
-            DocumentClientSign.save_document_client_sign(assinatura)
+        
         
         try:
             document.save_document()
+            for assinatura in assinaturas:
+                assinatura_db = DocumentClientSign(
+                    document_id=document.document_id,  # Certifique-se de que `document` é uma instância do modelo DocumentModel
+                    client_id=assinatura["client_id"],
+                    action=assinatura["action"],
+                    signature_type=assinatura["signature_type"],
+                    x=assinatura["x"],
+                    y=assinatura["y"],
+                    height=assinatura["height"],
+                    width=assinatura["width"],
+                    page=assinatura["page"]
+                )
+                DocumentClientSign.save_document_client_sign(assinatura_db)
         except Exception as e:
             return {'message': e}, 500
         return document.json(), 201
