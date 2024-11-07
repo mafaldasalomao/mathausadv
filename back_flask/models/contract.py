@@ -9,7 +9,7 @@ class ContractModel(db.Model):
     description = db.Column(db.String(80), nullable=True)
     drive_folder_id = db.Column(db.String(80))
     status = db.Column(db.String(80), default='CONTRATAÇÃO')
-    workflow_assine_id = db.Column(db.String(80), nullable=True)
+    workflow_assine_id = db.Column(db.String(80), nullable=True, default=None)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     clients = db.relationship('ClientModel')
@@ -28,6 +28,7 @@ class ContractModel(db.Model):
             'description': self.description,
             'drive_folder_id': self.drive_folder_id,
             'status': self.status,
+            'workflow_assine_id': self.workflow_assine_id,
             'created_at': self.created_at.strftime('%d/%m/%Y'),
             'updated_at': self.updated_at.strftime('%d/%m/%Y'),
             'clients':  [client.json() for client in self.clients if client.is_responsible == False],
