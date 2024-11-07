@@ -10,16 +10,17 @@ class DocumentClientSign(db.Model):
     document_id = db.Column(db.Integer, db.ForeignKey('document.document_id'))
     client_id = db.Column(db.Integer, db.ForeignKey('client.client_id'))
     action = db.Column(db.Integer, nullable=False, default=0)
-    signature_type = db.Column(db.Integer, nullable=False, default=0)
+    signature_type = db.Column(db.String, nullable=False, default=0)
 
     # Campos para posição e dimensões da assinatura
-    x = db.Column(db.Integer, nullable=False)
-    y = db.Column(db.Integer, nullable=False)
-    height = db.Column(db.Integer, nullable=False)
-    width = db.Column(db.Integer, nullable=False)
-    page = db.Column(db.Integer, nullable=False)
+    x = db.Column(db.String, nullable=False)
+    y = db.Column(db.String, nullable=False)
+    height = db.Column(db.String, nullable=False)
+    width = db.Column(db.String, nullable=False)
+    page = db.Column(db.String, nullable=False)
+    has_photo_sign = db.Column(db.Boolean, default=False)
 
-    def __init__(self, document_id, client_id, action, signature_type, x, y, height, width, page):
+    def __init__(self, document_id, client_id, action, signature_type, x, y, height, width, page, has_photo_sign=False):
         self.document_id = document_id
         self.client_id = client_id  
         self.action = action
@@ -29,6 +30,7 @@ class DocumentClientSign(db.Model):
         self.height = height
         self.width = width
         self.page = page
+        self.has_photo_sign = has_photo_sign
 
     def json(self):
         return {
@@ -41,6 +43,7 @@ class DocumentClientSign(db.Model):
             'y': self.y,
             'height': self.height,
             'width': self.width,
+            'has_photo_sign': self.has_photo_sign,
             'page': self.page
         }
     
@@ -64,7 +67,7 @@ class DocumentClientSign(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update_document_client_sign(self, document_id, client_id, action, signature_type, x, y, height, width, page):
+    def update_document_client_sign(self, document_id, client_id, action, signature_type, x, y, height, width, page, has_photo_sign=False):
         self.document_id = document_id
         self.client_id = client_id
         self.action = action
@@ -74,6 +77,7 @@ class DocumentClientSign(db.Model):
         self.height = height
         self.width = width
         self.page = page
+        self.has_photo_sign = has_photo_sign
 
         db.session.commit()
 
