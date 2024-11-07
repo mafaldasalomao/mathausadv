@@ -9,6 +9,7 @@ class ContractModel(db.Model):
     description = db.Column(db.String(80), nullable=True)
     drive_folder_id = db.Column(db.String(80))
     status = db.Column(db.String(80), default='CONTRATAÇÃO')
+    workflow_assine_id = db.Column(db.String(80), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     clients = db.relationship('ClientModel')
