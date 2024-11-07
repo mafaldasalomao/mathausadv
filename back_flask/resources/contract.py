@@ -136,7 +136,7 @@ class SendToSigner(Resource):
                 workflowStep = {
                     "user": {
                         "name": client.name,
-                        "email": client.email
+                        "email": client.responsible.email if client.responsible else client.email
                     },
                     "action": 0,  # Defina a ação conforme necessário
                     "signatureType": 0,  # Defina o tipo de assinatura conforme necessário

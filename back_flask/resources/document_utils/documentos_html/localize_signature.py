@@ -1,7 +1,7 @@
 import fitz  # PyMuPDF
 import re
 
-def localizar_assinaturas(pdf_path, assinantes):
+def localizar_assinaturas(pdf_path, non_responsible_clients):
     # Abra o PDF
     doc = fitz.open(pdf_path)
     
@@ -24,9 +24,9 @@ def localizar_assinaturas(pdf_path, assinantes):
             text_nearby = page.get_text("text", clip=(x0, y0 - 20, x1 + 200, y1 + 20))
             
             # Verificar se algum assinante está próximo da palavra "Assin."
-            for assinante in assinantes:
+            for assinante in non_responsible_clients:
                 # Criar um padrão para o nome do assinante específico
-                pattern = signature_pattern.format(re.escape(assinante))
+                pattern = signature_pattern.format(re.escape(assinante.name))
                 match = re.search(pattern, text_nearby, re.IGNORECASE)
                 
                 if match:
@@ -36,7 +36,7 @@ def localizar_assinaturas(pdf_path, assinantes):
                     x = str(x0)
                     y = str(y0)
                     assinaturas_encontradas.append({
-                        "client": assinante,
+                        "client_id": assinante.client_id,
                         "page": page_num + 1,
                         "type": 8,
                         "action": 0,
@@ -52,12 +52,3 @@ def localizar_assinaturas(pdf_path, assinantes):
                     break
 
     return assinaturas_encontradas
-
-pdf_document = "contrato-1.pdf"
-assinantes = ["Salomao Machado Mafalda", "Joao da Silca"]
-
-resultado = localizar_assinaturas(pdf_document, assinantes)
-
-# Exibir todos os resultados encontrados
-for assinatura in resultado:
-    print(assinatura)

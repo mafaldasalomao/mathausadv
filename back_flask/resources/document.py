@@ -2,6 +2,7 @@ from models.contract import ContractModel
 from flask_restful import Resource, reqparse, request
 from math import ceil
 from models.document import DocumentModel
+from models.document_client_sign import DocumentClientSign
 from resources.document_utils.documentos_html.formata_dados import (gerar_div_partes, gerar_div_assinaturas, gerar_lista_contatos)
 from resources.document_utils.documentos_html.html_to_pdf import gerar_documento
 from resources.document_utils.documentos_html.drive_utils import delete_document_google_drive
@@ -81,7 +82,7 @@ class Documents(Resource):
         })
             
         
-        file_id, assine_online_id = gerar_documento(data['document_type'], data, contract.drive_folder_id)
+        file_id, assine_online_id, assinaturas = gerar_documento(data['document_type'], data, contract.drive_folder_id, non_responsible_clients)
         document = {
                     'name': data['document_type'].capitalize(),
                     'service': data['service'],
@@ -93,6 +94,9 @@ class Documents(Resource):
                 }
         document = DocumentModel(**document)
         
+        for assinatura in assinaturas:
+            assinatura.document_id = document.document_id
+            DocumentClientSign.save_document_client_sign(assinatura)
         
         try:
             document.save_document()
