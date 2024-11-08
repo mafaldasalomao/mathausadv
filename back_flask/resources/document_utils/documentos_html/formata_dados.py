@@ -28,7 +28,8 @@ def gerar_div_assinaturas(assinaturas):
     div_html = ''
     assinatura_daniel = '''
             <section class="signature" style="width: 50%; margin: auto; text-align: center">
-            <div class="line" ></div> <!-- Linha visual para a assinatura -->
+            <img class="signature-img" src="https://cid-tec-bucket1-dev.s3.sa-east-1.amazonaws.com/signature_daniel.png" alt="Assinatura">
+            <div class="line" style="margin-top: -30px;"></div>
             <p>Assin. Daniel Mathaus Costa de Macêdo</p>
             <p>OAB/AC 4.355</p>
         </section>'''
