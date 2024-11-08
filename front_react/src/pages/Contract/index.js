@@ -96,6 +96,45 @@ const Contract = () => {
         }));
     };
 
+    const handleSendToSign = async () => {
+        Swal.fire({
+            title: 'Deseja enviar para assinatura?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--orange)',
+            cancelButtonColor: 'var(--deep-black)',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await apiPrivate.post(`/contract/${contract_id}/sendtosigner`,
+                        {},
+                        {
+                            headers: { 'Content-Type': 'application/json' },
+                            withCredentials: true
+                        }
+                    );
+
+                
+                    if (response.status === 200) {
+                        Swal.fire({
+                            title: 'Enviado para assinatura',
+                            icon: 'success',
+                            confirmButtonColor: 'var(--orange)',
+                            confirmButtonText: 'Ok'
+                        });
+                        fetchContractDetails();
+                    }
+                } catch (error) {
+                    console.error('Erro ao enviar o documento para assinatura:', error);
+                    fetchContractDetails();
+                }
+            }
+            
+        })
+    };
+
     const handleUploadDocument = () => {
         navigate("documents/new");
     };
@@ -268,7 +307,7 @@ const Contract = () => {
     return (
         <div style={{ padding: '16px' }}>
             <Typography variant="h4" style={{ color: 'var(--orange)', marginBottom: '16px' }}>
-                {contract.name} - {contract.created_at}
+                {contract.name} - {contract.created_at} - {contract.status}
             </Typography>
 
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
@@ -317,7 +356,8 @@ const Contract = () => {
                                     </Grid>
 
                                     {/* Coluna de Ações */}
-                                    <Grid item xs={4} style={{ textAlign: 'right' }}>
+                                    {contract.status === 'CONTRATAÇÃO' && (
+                                        <Grid item xs={4} style={{ textAlign: 'right' }}>
                                         {!part.responsible && (
                                             <Button
                                                 variant="outlined"
@@ -338,6 +378,8 @@ const Contract = () => {
                                             <DeleteIcon />
                                         </Button>
                                     </Grid>
+                                    )}
+                                    
                                 </Grid>
                             </ListItem>
                             {index < parts.length - 1 && <Divider />}
@@ -349,7 +391,9 @@ const Contract = () => {
                     </Typography>
                 )}
 
-                <ListItem>
+                {contract.status === 'CONTRATAÇÃO' && (
+
+<ListItem>
                     <Button
                         variant="outlined"
                         startIcon={<AddIcon />}
@@ -359,6 +403,9 @@ const Contract = () => {
                         Novo Contratante
                     </Button>
                 </ListItem>
+                )}
+
+                
             </List>
 
 
@@ -425,6 +472,18 @@ const Contract = () => {
                                         Gerar Novamente
                                     </Button> */}
                                     
+                                    
+                                    {contract.status === 'CONTRATAÇÃO' && (
+                                        <>
+                                        <Button
+                                        variant="outlined"
+                                        startIcon={<CreateIcon />}
+                                        style={{ margin: '10px', color: '#fff', textAlign: 'right' }}
+                                        onClick={() => handleSendToSign()}
+                                        className="button-add"
+                                    >
+                                        Enviar para Assinatura
+                                    </Button>
                                     <Button
                                         variant="contained"
                                         color="secondary"
@@ -433,15 +492,9 @@ const Contract = () => {
                                     >
                                         Deletar Todos Documentos
                                     </Button>
-                                    <Button
-                                        variant="outlined"
-                                        startIcon={<CreateIcon />}
-                                        style={{ margin: '10px', color: '#fff', textAlign: 'right' }}
-                                        onClick={() => handleUploadDocument()}
-                                        className="button-add"
-                                    >
-                                        Enviar para Assinatura
-                                    </Button>
+                                    </>
+                                    )}
+                                    
                                 </>
                             ) : (
                                 <Button

@@ -5,7 +5,7 @@ from models.contract import ContractModel
 from models.document_client_sign import DocumentClientSign
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
-from resources.document_utils.documentos_html.drive_utils import create_folder
+from resources.document_utils.documentos_html.drive_utils import create_folder, create_workflow_assine_online
 import time
 from datetime import datetime, timedelta
 
@@ -84,7 +84,7 @@ class Contract(Resource):
 class SendToSigner(Resource):
     @jwt_required()
     def post(self, contract_id):
-        contract = ContractModel.find_document(contract_id)
+        contract = ContractModel.find_contract(contract_id)
         
         if not contract:
             return {'message': 'Contract not found'}, 404
@@ -149,5 +149,9 @@ class SendToSigner(Resource):
             files.append(file)
 
         workflow_data["files"] = files
-        print(workflow_data)
-        return workflow_data, 200
+        workflow_id = create_workflow_assine_online(workflow_data)
+
+        contract.workflow_assine_id = workflow_id
+        contract.status = "PRÉ-EXECUÇÃO"
+        contract.save_contract()
+        return contract.json(), 200

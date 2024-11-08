@@ -2,6 +2,7 @@
 from __future__ import print_function
 import os.path
 import os
+import json
 import requests
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "mathausadv-documentos-d71d906e524e.json"
 
@@ -115,3 +116,25 @@ def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e
         except requests.exceptions.RequestException as e:
             print(f"An error occurred: {e}")
             return None
+
+
+def create_workflow_assine_online(data, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+    url = "https://api.assine.online/v1/workflow"
+    
+    headers = {
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        'Authorization': f'Bearer {token}'
+    }
+    payload = json.dumps(data)
+        
+    try:
+        # Envia o arquivo para a API
+        response = requests.post(url, headers=headers, data=payload)
+        response.raise_for_status()  # Lança uma exceção para status de erro HTTP
+
+        return response.json().get("id", "ID not found in response")
+        
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None

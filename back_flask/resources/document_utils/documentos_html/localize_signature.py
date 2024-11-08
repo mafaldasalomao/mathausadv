@@ -34,7 +34,7 @@ def localizar_assinaturas(pdf_path, non_responsible_clients):
                     width = str(x1 - x0)
                     height = str(y1 - y0)
                     x = str(x0)
-                    y = str(y0)
+                    y = str(y0 - 20)
                     assinaturas_encontradas.append({
                         "client_id": assinante.client_id,
                         "page": page_num + 1,
@@ -43,8 +43,8 @@ def localizar_assinaturas(pdf_path, non_responsible_clients):
                         "signature_type": "8",
                         "x": x,
                         "y": y,
-                        "width": width,
-                        "height": height
+                        "width": str(200),
+                        "height": str(46)
                     })
                     print(f"Assinatura encontrada na página {page_num + 1} para {assinante}:")
                     print(f"Localização: (x0: {x0}, y0: {y0}), (x1: {x1}, y1: {y1})")
