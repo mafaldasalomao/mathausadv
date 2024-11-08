@@ -136,6 +136,9 @@ class Document(Resource):
         
         if document:
             delete_document_google_drive(document.gdrive_id)
+            signatures = DocumentClientSign.query.filter_by(document_id=document_id).all()
+            for signature in signatures:
+                signature.delete_document_client_sign()
             if document.delete_document():
                 return {'message': 'Document deleted'}
             else:

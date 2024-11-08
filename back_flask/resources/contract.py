@@ -150,4 +150,4 @@ class SendToSigner(Resource):
 
         workflow_data["files"] = files
         print(workflow_data)
-        return workflow_data
+        return workflow_data, 200
