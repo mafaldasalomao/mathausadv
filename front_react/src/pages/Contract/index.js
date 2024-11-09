@@ -172,7 +172,7 @@ const Contract = () => {
                 }
     
                 // Atualiza a lista de documentos no estado
-                setDocuments([]);
+                fetchContractDetails();
                 setShowProgress(false); // Esconde o indicador de progresso após a exclusão
     
                 // Exibe uma mensagem de sucesso
@@ -361,9 +361,10 @@ const Contract = () => {
                                         {!part.responsible && (
                                             <Button
                                                 variant="outlined"
+                                                color="secondary"
                                                 startIcon={<AddIcon />}
                                                 onClick={() => handleAddPart(part.client_id)}
-                                                className="button-add"
+                                            
                                             >
                                                 Responsável
                                             </Button>
@@ -420,7 +421,7 @@ const Contract = () => {
                     </Typography>
                 </Box>
             )}
-            
+            {parts.length > 0  ? (
             <List component={Paper}>
                 <TableContainer component={Paper}>
                     <Table>
@@ -429,11 +430,10 @@ const Contract = () => {
                                 <TableCell>Nome</TableCell>
                                 <TableCell>Google Drive</TableCell>
                                 <TableCell>Data de Assinatura</TableCell>
-                                <TableCell>Assine Online</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {documents.length > 0 ? (
+                            {documents.length > 0 && (
                                 documents.map((document, index) => (
                                     <TableRow key={index}>
                                         <TableCell>{document.name}</TableCell>
@@ -443,18 +443,9 @@ const Contract = () => {
                                             </a>
                                         </TableCell>
                                         <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
-                                        <TableCell>{document.assine_online_id || 'Não assinada'}</TableCell>
                                     </TableRow>
                                 ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={8} align="center">
-                                        <Typography variant="body2" style={{ padding: '16px' }}>
-                                            Nenhum documento cadastrado.
-                                        </Typography>
-                                    </TableCell>
-                                </TableRow>
-                            )}
+                            ) }
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -511,6 +502,11 @@ const Contract = () => {
 
                 </ListItem>
             </List>
+            ) : (
+                <Typography variant="body2" style={{ padding: '16px' }}>
+                    Nenhum documento cadastrado.
+                </Typography>
+            )}
 
             <Dialog open={open} onClose={handleCloseModal} maxWidth="lg" fullWidth>
                 <DialogTitle className="dialog-title">Adicionar Novo {client_id ? 'Responsável' : 'Contratante'}</DialogTitle>
