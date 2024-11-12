@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CreateIcon from '@mui/icons-material/Create';
+import EditIcon from '@mui/icons-material/Edit';
 import DriveIcon from '@mui/icons-material/DriveFileMove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Divider } from '@mui/material'
@@ -116,7 +117,7 @@ const Contract = () => {
                         }
                     );
 
-                
+
                     if (response.status === 200) {
                         Swal.fire({
                             title: 'Enviado para assinatura',
@@ -131,7 +132,7 @@ const Contract = () => {
                     fetchContractDetails();
                 }
             }
-            
+
         })
     };
 
@@ -139,6 +140,9 @@ const Contract = () => {
         navigate("documents/new");
     };
 
+    const handleUpdateStatus = () => {
+        
+    }
     const handleDeleteAllDocuments = async () => {
         try {
             // Confirmação inicial do usuário
@@ -151,16 +155,16 @@ const Contract = () => {
                 confirmButtonText: 'Sim',
                 cancelButtonText: 'Cancelar'
             });
-    
+
             if (result.isConfirmed) {
                 // Mostra a mensagem e o indicador de progresso
                 const progressContainer = document.getElementById('progressContainer');
                 setShowProgress(true);
-    
+
                 // Deleta os documentos um por um
                 for (const [index, document] of documents.entries()) {
                     setCurrentDocument(`Deletando documento ${index + 1} de ${documents.length}`);
-    
+
                     try {
                         await apiPrivate.delete(`/document/${document.document_id}`, {
                             headers: { 'Content-Type': 'application/json' },
@@ -170,11 +174,11 @@ const Contract = () => {
                         console.error(`Erro ao deletar o documento ${document.id}:`, error);
                     }
                 }
-    
+
                 // Atualiza a lista de documentos no estado
                 fetchContractDetails();
                 setShowProgress(false); // Esconde o indicador de progresso após a exclusão
-    
+
                 // Exibe uma mensagem de sucesso
                 Swal.fire({
                     title: 'Documentos deletados com sucesso!',
@@ -185,7 +189,7 @@ const Contract = () => {
             }
         } catch (error) {
             console.error('Erro ao deletar os documentos:', error);
-    
+
             // Exibe uma mensagem de erro
             Swal.fire({
                 title: 'Ocorreu um erro ao deletar os documentos.',
@@ -309,6 +313,24 @@ const Contract = () => {
             <Typography variant="h4" style={{ color: 'var(--orange)', marginBottom: '16px' }}>
                 {contract.name} - {contract.created_at} - {contract.status}
             </Typography>
+            {contract.status === 'EXECUÇÃO DO SERVIÇO' && (
+                <Grid item xs={4} style={{ textAlign: 'right' }}>
+
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<EditIcon />}
+                        onClick={() => handleUpdateStatus()}
+
+                    >
+                        Alterar Status
+                    </Button>
+
+
+                </Grid>
+            )}
+
+
 
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
                 Dados das Partes
@@ -358,29 +380,29 @@ const Contract = () => {
                                     {/* Coluna de Ações */}
                                     {contract.status === 'CONTRATAÇÃO' && (
                                         <Grid item xs={4} style={{ textAlign: 'right' }}>
-                                        {!part.responsible && (
+                                            {!part.responsible && (
+                                                <Button
+                                                    variant="outlined"
+                                                    color="secondary"
+                                                    startIcon={<AddIcon />}
+                                                    onClick={() => handleAddPart(part.client_id)}
+
+                                                >
+                                                    Responsável
+                                                </Button>
+                                            )}
+
                                             <Button
                                                 variant="outlined"
                                                 color="secondary"
-                                                startIcon={<AddIcon />}
-                                                onClick={() => handleAddPart(part.client_id)}
-                                            
+                                                onClick={() => handleDeletePart(part.client_id)}
+                                                style={{ marginLeft: '8px' }}
                                             >
-                                                Responsável
+                                                <DeleteIcon />
                                             </Button>
-                                        )}
-
-                                        <Button
-                                            variant="outlined"
-                                            color="secondary"
-                                            onClick={() => handleDeletePart(part.client_id)}
-                                            style={{ marginLeft: '8px' }}
-                                        >
-                                            <DeleteIcon />
-                                        </Button>
-                                    </Grid>
+                                        </Grid>
                                     )}
-                                    
+
                                 </Grid>
                             </ListItem>
                             {index < parts.length - 1 && <Divider />}
@@ -394,19 +416,19 @@ const Contract = () => {
 
                 {contract.status === 'CONTRATAÇÃO' && (
 
-<ListItem>
-                    <Button
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        onClick={() => handleAddPart(null)}
-                        className="button-add"
-                    >
-                        Novo Contratante
-                    </Button>
-                </ListItem>
+                    <ListItem>
+                        <Button
+                            variant="outlined"
+                            startIcon={<AddIcon />}
+                            onClick={() => handleAddPart(null)}
+                            className="button-add"
+                        >
+                            Novo Contratante
+                        </Button>
+                    </ListItem>
                 )}
 
-                
+
             </List>
 
 
@@ -421,40 +443,40 @@ const Contract = () => {
                     </Typography>
                 </Box>
             )}
-            {parts.length > 0  ? (
-            <List component={Paper}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Nome</TableCell>
-                                <TableCell>Google Drive</TableCell>
-                                <TableCell>Data de Assinatura</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {documents.length > 0 && (
-                                documents.map((document, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>{document.name}</TableCell>
-                                        <TableCell>
-                                            <a href={`https://drive.google.com/uc?id=${document.gdrive_id}`} target="_blank" rel="noopener noreferrer">
-                                                <DriveIcon />
-                                            </a>
-                                        </TableCell>
-                                        <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
-                                    </TableRow>
-                                ))
-                            ) }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <ListItem>
-                    {parts.length > 0 && (
-                        <Stack spacing={1}> {/* Adiciona espaçamento entre os botões */}
-                            {contract.documents && contract.documents.length > 0 ? (
-                                <>
-                                    {/* <Button
+            {parts.length > 0 ? (
+                <List component={Paper}>
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>Google Drive</TableCell>
+                                    <TableCell>Data de Assinatura</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {documents.length > 0 && (
+                                    documents.map((document, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{document.name}</TableCell>
+                                            <TableCell>
+                                                <a href={`https://drive.google.com/uc?id=${document.gdrive_id}`} target="_blank" rel="noopener noreferrer">
+                                                    <DriveIcon />
+                                                </a>
+                                            </TableCell>
+                                            <TableCell>{document.signed_at || 'Não assinada'}</TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <ListItem>
+                        {parts.length > 0 && (
+                            <Stack spacing={1}> {/* Adiciona espaçamento entre os botões */}
+                                {contract.documents && contract.documents.length > 0 ? (
+                                    <>
+                                        {/* <Button
                                         variant="outlined"
                                         startIcon={<AddIcon />}
                                         onClick={() => handleUploadDocument()}
@@ -462,46 +484,46 @@ const Contract = () => {
                                     >
                                         Gerar Novamente
                                     </Button> */}
-                                    
-                                    
-                                    {contract.status === 'CONTRATAÇÃO' && (
-                                        <>
-                                        <Button
+
+
+                                        {contract.status === 'CONTRATAÇÃO' && (
+                                            <>
+                                                <Button
+                                                    variant="outlined"
+                                                    startIcon={<CreateIcon />}
+                                                    style={{ margin: '10px', color: '#fff', textAlign: 'right' }}
+                                                    onClick={() => handleSendToSign()}
+                                                    className="button-add"
+                                                >
+                                                    Enviar para Assinatura
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={() => handleDeleteAllDocuments()}
+                                                    style={{ margin: '10px', backgroundColor: 'var(--dark-orange)', color: '#fff', textAlign: 'right' }}
+                                                >
+                                                    Deletar Todos Documentos
+                                                </Button>
+                                            </>
+                                        )}
+
+                                    </>
+                                ) : (
+                                    <Button
                                         variant="outlined"
-                                        startIcon={<CreateIcon />}
-                                        style={{ margin: '10px', color: '#fff', textAlign: 'right' }}
-                                        onClick={() => handleSendToSign()}
+                                        startIcon={<AddIcon />}
+                                        onClick={() => handleUploadDocument()}
                                         className="button-add"
                                     >
-                                        Enviar para Assinatura
+                                        Gerar Documentos
                                     </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() => handleDeleteAllDocuments()}
-                                        style={{ margin: '10px', backgroundColor: 'var(--dark-orange)', color: '#fff', textAlign: 'right' }}
-                                    >
-                                        Deletar Todos Documentos
-                                    </Button>
-                                    </>
-                                    )}
-                                    
-                                </>
-                            ) : (
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<AddIcon />}
-                                    onClick={() => handleUploadDocument()}
-                                    className="button-add"
-                                >
-                                    Gerar Documentos
-                                </Button>
-                            )}
-                        </Stack>
-                    )}
+                                )}
+                            </Stack>
+                        )}
 
-                </ListItem>
-            </List>
+                    </ListItem>
+                </List>
             ) : (
                 <Typography variant="body2" style={{ padding: '16px' }}>
                     Nenhum documento cadastrado.
