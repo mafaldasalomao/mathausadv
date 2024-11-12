@@ -69,6 +69,18 @@ class Contract(Resource):
             return contract.json()
         return {'message': 'Contract not found'}, 404
     
+    @jwt_required()
+    def put(self, contract_id):
+        contract = ContractModel.find_contract(contract_id)
+        if contract:
+            data = Contract.parser.parse_args()
+            contract.name = data['name']
+            contract.description = data['description']
+            contract.status = data['status']
+            contract.save_contract()
+            return contract.json()
+        return {'message': 'Contract not found'}, 404
+    
 
     @jwt_required()
     def delete(self, contract_id):

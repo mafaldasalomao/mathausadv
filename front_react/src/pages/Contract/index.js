@@ -6,8 +6,8 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
+    Select,
+    MenuItem,
     CircularProgress,
     Paper,
     Dialog,
@@ -43,6 +43,10 @@ const Contract = () => {
     const [showProgress, setShowProgress] = useState(false);
     const [currentDocument, setCurrentDocument] = useState('');
     const [open, setOpen] = useState(false);
+    const [openPopupStatus, setOpenPopupStatus] = useState(false);
+    const [newStatus, setNewStatus] = useState();
+    const handleOpenPopupStatus = () => setOpenPopupStatus(true);
+    const handleClosePopupStatus = () => setOpenPopupStatus(false);
 
     const [novoContratante, setNovoContratante] = useState({
         name: '',
@@ -58,6 +62,7 @@ const Contract = () => {
         try {
             const response = await apiPrivate.get(`/contract/${contract_id}`);
             setContract(response.data);
+            setNewStatus(response.data.status);
             setParts(response.data.clients || []);
             setDocuments(response.data.documents || []);
             setIsLoading(false);
@@ -67,6 +72,36 @@ const Contract = () => {
         }
     };
 
+    const handleChangeStatus = (event) => {
+        setNewStatus(event.target.value);
+    };
+
+    const handleSaveStatus = async () => {
+        // Atualiza o status do contrato
+        try {
+            const formData = new FormData();
+            formData.append('status', newStatus);
+            formData.append('name', contract.name);
+            formData.append('description', contract.description);
+            handleClosePopupStatus();
+            Swal.showLoading();
+            const response = await apiPrivate.put(`/contract/${contract_id}`, formData,
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+
+            if (response.status === 200) {
+                setContract(prevContract => ({ ...prevContract, status: newStatus }));
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar o status do contrato:', error);
+        }
+
+        Swal.close();
+
+    };
     const handleAddPart = (client_id) => {
         setClientId(client_id);
         setOpen(true);
@@ -140,9 +175,6 @@ const Contract = () => {
         navigate("documents/new");
     };
 
-    const handleUpdateStatus = () => {
-        
-    }
     const handleDeleteAllDocuments = async () => {
         try {
             // Confirmação inicial do usuário
@@ -313,14 +345,14 @@ const Contract = () => {
             <Typography variant="h4" style={{ color: 'var(--orange)', marginBottom: '16px' }}>
                 {contract.name} - {contract.created_at} - {contract.status}
             </Typography>
-            {contract.status === 'EXECUÇÃO DO SERVIÇO' && (
+            {(contract.status === 'EXECUÇÃO DO SERVIÇO' || contract.status === 'ADITIVO' || contract.status === 'REVISÃO CONTRATUAL') && (
                 <Grid item xs={4} style={{ textAlign: 'right' }}>
 
                     <Button
                         variant="outlined"
                         color="secondary"
                         startIcon={<EditIcon />}
-                        onClick={() => handleUpdateStatus()}
+                        onClick={() => handleOpenPopupStatus()}
 
                     >
                         Alterar Status
@@ -608,6 +640,30 @@ const Contract = () => {
                     </Button>
                     <Button onClick={addContratante} color="primary">
                         Adicionar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={openPopupStatus} onClose={handleClosePopupStatus} maxWidth="sm"  fullWidth >
+                <DialogTitle>Alterar Status do Contrato</DialogTitle>
+                <DialogContent>
+                    <Select
+                        value={newStatus}
+                        onChange={handleChangeStatus}
+                        fullWidth
+                        style={{ marginBottom: '16px' }}    
+                    >
+                        <MenuItem value="EXECUÇÃO DO SERVIÇO">EXECUÇÃO DO SERVIÇO</MenuItem>
+                        <MenuItem value="ADITIVO">ADITIVO</MenuItem>
+                        <MenuItem value="REVISÃO CONTRATUAL">REVISÃO CONTRATUAL</MenuItem>
+                        <MenuItem value="ENCERRAMENTO">ENCERRAMENTO</MenuItem>
+                    </Select>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClosePopupStatus} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleSaveStatus} color="primary" variant="contained">
+                        Salvar
                     </Button>
                 </DialogActions>
             </Dialog>
