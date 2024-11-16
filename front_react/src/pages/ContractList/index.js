@@ -100,7 +100,7 @@ const ContractList = () => {
         <AddIcon sx={{ marginRight: '8px' }} />
         Novo Contrato
       </Button>
-      <TextField
+      {/* <TextField
         label="Filtrar contratos"
         variant="outlined"
         fullWidth
@@ -113,7 +113,7 @@ const ContractList = () => {
         InputLabelProps={{
           style: { color: 'rgba(94, 94, 94, 0.712)' },
         }}
-      />
+      /> */}
 
       <TableContainer component={Paper}>
         <Table>

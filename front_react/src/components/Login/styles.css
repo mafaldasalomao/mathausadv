@@ -10,7 +10,7 @@
 .login-container section.login-form {
     width: 500px;
     margin-right: 30px;
-    border: #26425f 1px solid;
+    border: #1c1c36 1px solid;
     background-color: #f0f0f5;
     padding: 20px;
     border-radius: 10px;
@@ -27,7 +27,7 @@
 .login-container section.login-form form h1 {
     margin-bottom: 10px;
     text-align: center;
-    color: #26425f;
+    color: #D97C2B;
 }
 
 
@@ -44,8 +44,9 @@
 }
 .button-login {
     width: 100%;
+    cursor: pointer;
     height: 60px;
-    background: #26425f;
+    background: #D97C2B;
     border: 0;
     border-radius: 8px;
     color: #fff;

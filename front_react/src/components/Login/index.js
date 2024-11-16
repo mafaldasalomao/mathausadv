@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './styles.css';
 import logoImage from '../../assets/Dm_Logo.png';
+import logo from '../../assets/Logo_crop.png';
 import api from '../../services/api'
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -46,7 +47,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <section className="login-form">
-        <img src={logoImage} alt="Login" />
+        <img src={logo} alt="Login" />
         <form onSubmit={handleLogin}>
           <h1>Área administrativa</h1>
           <input
