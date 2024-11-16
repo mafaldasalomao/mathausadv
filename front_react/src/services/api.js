@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const baseURLprod= 'https://cidtec-api-flask-ee0e74cde317.herokuapp.com/api/'
+const baseURLprod= 'http://104.248.32.80:5000/api/v1/user/'
 const baseURLdev= 'http://localhost:5000/api/v1/user/'
 
 const api = axios.create({
@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 export const api_private = axios.create({
-    baseURL: baseURLdev,
+    baseURL: baseURLprod,
     headers: {
         "Content-Type": "application/json",
     },
