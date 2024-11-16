@@ -15,7 +15,7 @@ from config_json import *
 from config import DevConfig, ProdConfig
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='build', static_url_path='')
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object(ProdConfig)
 else:
@@ -40,9 +40,21 @@ def verify_blacklist(self, token):
 def token_access_invalid(jwt_header, jwt_payload):
    return jsonify({'message': 'You have been logged out. Please log in again.'}), 401 
 
-#@app.route('/')
-#def serve():
-#    return send_from_directory(app.static_folder, 'index.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+
+@app.route('/favicon.ico', methods=["GET"])
+def favicon():
+    return app.send_static_file('favicon.ico')
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 if __name__ == '__main__':
    from sql_alchemy import db
    db.init_app(app)
