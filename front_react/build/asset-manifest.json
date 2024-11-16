@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a06d6dfd.css",
+    "main.js": "/static/js/main.6d37c41e.js",
+    "static/media/Dm_Logo.png": "/static/media/Dm_Logo.eb4c0580eca2eb7301f6.png",
+    "static/media/Logo_crop.png": "/static/media/Logo_crop.390cbfbdd8e51a5edb66.png",
+    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/index.html",
+    "main.a06d6dfd.css.map": "/static/css/main.a06d6dfd.css.map",
+    "main.6d37c41e.js.map": "/static/js/main.6d37c41e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a06d6dfd.css",
+    "static/js/main.6d37c41e.js"
+  ]
+}
