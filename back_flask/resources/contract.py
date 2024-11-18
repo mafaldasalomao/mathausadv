@@ -13,27 +13,47 @@ class Contracts(Resource):
     
 
     def get(self):
+        # Parâmetros de paginação
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
         offset = (page - 1) * per_page
 
-        total_contracts = ContractModel.query.count()
+        # Parâmetros de filtragem
+        name = request.args.get('name', type=str)
+        description = request.args.get('description', type=str)
+        status = request.args.get('status', type=str)
+
+        # Construir a query inicial
+        query = ContractModel.query
+
+        # Adicionar filtros dinamicamente
+        if name:
+            query = query.filter(ContractModel.name.ilike(f"%{name}%"))
+        if description:
+            query = query.filter(ContractModel.description.ilike(f"%{description}%"))
+        if status:
+            query = query.filter(ContractModel.status == status)
+
+        # Contar o total após filtros
+        total_contracts = query.count()
 
         # Calcular o total de páginas
         total_pages = ceil(total_contracts / per_page)
 
+        # Adicionar ordenação e paginação
+        contracts = (query
+                     .order_by(desc(ContractModel.created_at))
+                     .offset(offset)
+                     .limit(per_page)
+                     .all())
 
-        contracts = (ContractModel.query
-                    .order_by(desc(ContractModel.created_at)) 
-                    .offset(offset)
-                    .limit(per_page)
-                    .all())
-
+        # Retornar os resultados paginados
         return {
             'contracts': [contract.json() for contract in contracts],
             'page': page,
             'per_page': per_page,
-            'total_pages': total_pages
+            'total_pages': total_pages,
+            'total_contracts': total_contracts
         }
 
     
