@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Typography, TextField, CircularProgress, Icon } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Table, TableBody, TableCell, TableContainer, FormControl, InputLabel, Select, TableHead, MenuItem, TableRow, Paper, Button, IconButton, Typography, TextField, CircularProgress, Icon } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Pagination from '@mui/material/Pagination';
@@ -11,16 +9,15 @@ import './styles.css'; // Importa as cores personalizadas
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const ContractList = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const apiPrivate = useAxiosPrivate();
   const [contracts, setContracts] = useState([]);
   // Filtra os contratos com base no termo de busca
-  const [searchQueryName, setSearchQueryName] = useState('');
-  const [searchQueryDescription, setSearchQueryDescription] = useState('');
-  
+
+
   const [filters, setFilters] = useState({ name: '', description: '', status: '' });
   const statuses = ['CONTRATAÇÃO', 'PRÉ-EXECUÇÃO', 'EXECUÇÃO DO SERVIÇO', 'ADITIVO', 'REVISÃO CONTRATUAL', 'ENCERRAMENTO'];
 
@@ -33,7 +30,12 @@ const ContractList = () => {
     const fetchContracts = async () => {
       try {
         setIsLoading(true);
-        const response = await apiPrivate.get(`/contracts?page=${page}&per_page=10`);
+        const queryParams = new URLSearchParams({
+          page,
+          per_page: 10,
+          ...filters,
+        }).toString();
+        const response = await apiPrivate.get(`/contracts?${queryParams}`);
         setContracts(response.data.contracts);
         setTotalPages(response.data.total_pages);
         setIsLoading(false);
@@ -43,16 +45,16 @@ const ContractList = () => {
       }
     };
     fetchContracts();
-  }, [page]);
+  }, [page, filters]);
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
-  // const filteredContracts = contracts.filter(
-  //   (contract) =>
-  //     contract.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     contract.description.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+
 
   const handleCreateContract = () => {
     // Lógica para criar um novo contrato
@@ -108,20 +110,35 @@ const ContractList = () => {
         <AddIcon sx={{ marginRight: '8px' }} />
         Novo Contrato
       </Button>
-      {/* <TextField
-        label="Filtrar contratos"
-        variant="outlined"
-        fullWidth
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: '24px' }}
-        InputProps={{
-          style: { color: 'var(--dark-brown)' },
-        }}
-        InputLabelProps={{
-          style: { color: 'rgba(94, 94, 94, 0.712)' },
-        }}
-      /> */}
+
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+        <TextField
+          label="Nome"
+          variant="outlined"
+          value={filters.name}
+          onChange={(e) => handleFilterChange('name', e.target.value)}
+          fullWidth
+        />
+        <TextField
+          label="Descrição"
+          variant="outlined"
+          value={filters.description}
+          onChange={(e) => handleFilterChange('description', e.target.value)}
+          fullWidth
+        />
+        <FormControl fullWidth>
+          <InputLabel>Status</InputLabel>
+          <Select
+            value={filters.status}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
+          >
+            <MenuItem value="">Todos</MenuItem>
+            {statuses.map((status, index) => (
+              <MenuItem key={index} value={status}>{status}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
 
       <TableContainer component={Paper}>
         <Table>
