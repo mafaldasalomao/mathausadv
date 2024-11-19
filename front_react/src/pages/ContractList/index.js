@@ -17,9 +17,11 @@ const ContractList = () => {
   const [contracts, setContracts] = useState([]);
   // Filtra os contratos com base no termo de busca
 
+  const [searchQueryName, setSearchQueryName] = useState('');
+  const [searchQueryDescription, setSearchQueryDescription] = useState('');
+  const [searchQueryStatus, setSearchQueryStatus] = useState('');
+  const [appliedFilters, setAppliedFilters] = useState({});
 
-  const [filters, setFilters] = useState({ name: '', description: '', status: '' });
-  const statuses = ['CONTRATAÇÃO', 'PRÉ-EXECUÇÃO', 'EXECUÇÃO DO SERVIÇO', 'ADITIVO', 'REVISÃO CONTRATUAL', 'ENCERRAMENTO'];
 
 
 
@@ -33,7 +35,7 @@ const ContractList = () => {
         const queryParams = new URLSearchParams({
           page,
           per_page: 10,
-          ...filters,
+          ...appliedFilters, 
         }).toString();
         const response = await apiPrivate.get(`/contracts?${queryParams}`);
         setContracts(response.data.contracts);
@@ -45,17 +47,20 @@ const ContractList = () => {
       }
     };
     fetchContracts();
-  }, [page, filters]);
+  }, [page, appliedFilters]);
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
-  const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+
+  const handleApplyFilters = () => {
+    setAppliedFilters({
+      name: searchQueryName,
+      description: searchQueryDescription,
+      status: searchQueryStatus,
+    });
+    setPage(1); 
   };
-
-
-
   const handleCreateContract = () => {
     // Lógica para criar um novo contrato
     navigate('/user/contracts/new');
@@ -111,33 +116,46 @@ const ContractList = () => {
         Novo Contrato
       </Button>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
         <TextField
           label="Nome"
           variant="outlined"
-          value={filters.name}
-          onChange={(e) => handleFilterChange('name', e.target.value)}
-          fullWidth
+          value={searchQueryName}
+          onChange={(e) => setSearchQueryName(e.target.value)}
+          style={{ flex: 1 }}
         />
         <TextField
           label="Descrição"
           variant="outlined"
-          value={filters.description}
-          onChange={(e) => handleFilterChange('description', e.target.value)}
-          fullWidth
+          value={searchQueryDescription}
+          onChange={(e) => setSearchQueryDescription(e.target.value)}
+          style={{ flex: 1 }}
         />
-        <FormControl fullWidth>
+        <FormControl variant="outlined" style={{ flex: 1 }}>
           <InputLabel>Status</InputLabel>
           <Select
-            value={filters.status}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
+            value={searchQueryStatus}
+            onChange={(e) => setSearchQueryStatus(e.target.value)}
+            label="Status"
           >
             <MenuItem value="">Todos</MenuItem>
-            {statuses.map((status, index) => (
-              <MenuItem key={index} value={status}>{status}</MenuItem>
-            ))}
+            <MenuItem value="CONTRATAÇÃO">CONTRATAÇÃO</MenuItem>
+            <MenuItem value="PRÉ-EXECUÇÃO">PRÉ-EXECUÇÃO</MenuItem>
+            <MenuItem value="EXECUÇÃO DO SERVIÇO">EXECUÇÃO DO SERVIÇO</MenuItem>
+            <MenuItem value="ADITIVO">ADITIVO</MenuItem>
+            <MenuItem value="REVISÃO CONTRATUAL">REVISÃO CONTRATUAL</MenuItem>
+            <MenuItem value="ENCERRAMENTO">ENCERRAMENTO</MenuItem>
+            <MenuItem value="CANCELADO">CANCELADO</MenuItem>
           </Select>
         </FormControl>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleApplyFilters}
+          style={{ backgroundColor: 'var(--orange)', color: 'white' }}
+        >
+          Aplicar Filtros
+        </Button>
       </div>
 
       <TableContainer component={Paper}>
