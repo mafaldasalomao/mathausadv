@@ -18,6 +18,14 @@ const ContractList = () => {
   const apiPrivate = useAxiosPrivate();
   const [contracts, setContracts] = useState([]);
   // Filtra os contratos com base no termo de busca
+  const [searchQueryName, setSearchQueryName] = useState('');
+  const [searchQueryDescription, setSearchQueryDescription] = useState('');
+  
+  const [filters, setFilters] = useState({ name: '', description: '', status: '' });
+  const statuses = ['CONTRATAÇÃO', 'PRÉ-EXECUÇÃO', 'EXECUÇÃO DO SERVIÇO', 'ADITIVO', 'REVISÃO CONTRATUAL', 'ENCERRAMENTO'];
+
+
+
   const navigate = useNavigate();
 
 

@@ -40,6 +40,8 @@ def list_files():
             print(f"{item['name']} ({item['id']})")
 
 
+
+
 def create_folder(folder_name, parent_folder_id):
     """Cria uma pasta no Google Drive e retorna o ID dela"""
     file_metadata = {
@@ -54,7 +56,7 @@ def create_folder(folder_name, parent_folder_id):
     # Retorna o ID da pasta criada
     print(f'Pasta "{folder_name}" criada com ID: {folder.get("id")}')
     return folder.get('id')
-
+create_folder('teste', '13DTt3-WM7yzVjELGaJPML7XsVB_40RFz')
 def upload_to_google_drive(file_path, document_type, parent_folder_id):
     # Autenticação com as credenciais da conta de serviço
     creds = service_account.Credentials.from_service_account_file(

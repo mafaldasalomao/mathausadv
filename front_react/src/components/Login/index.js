@@ -5,7 +5,7 @@ import logo from '../../assets/Logo_crop.png';
 import api from '../../services/api'
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import Swal from 'sweetalert2';
 export default function Login() {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +24,14 @@ export default function Login() {
       username: userName,
       password: password
     };
+
+    Swal.fire({
+      title: 'Aguarde...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    })
     try {
       const response = await api.post('login', data,
         {
@@ -39,9 +47,17 @@ export default function Login() {
       setAuth({ 'user': userName, 'access_token': access_token });
       navigate(from, { replace: true });
 
-
+      Swal.close();
     } catch (error) {
       console.log('Err')
+      Swal.fire({
+        title: 'Erro ao fazer login',
+        text: 'Verifique suas credenciais',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: 'var(--orange)',
+        allowOutsideClick: false,
+      })
     }
   }
   return (
