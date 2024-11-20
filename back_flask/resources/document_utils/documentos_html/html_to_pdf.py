@@ -45,11 +45,11 @@ def gerar_documento(document_type, data, drive_folder_id, non_responsible_client
         )
     if os.path.exists(pdf_path):
         file_id = upload_to_google_drive(pdf_path, f"{document_type.lower()}", drive_folder_id)
-        assine_online_id = upload_to_assine_online(pdf_path, f"{document_type.lower()}")
+        assine_online_id, assine_online_uuid = upload_to_assine_online(pdf_path, f"{document_type.lower()}")
         assinaturas = localizar_assinaturas(pdf_path, non_responsible_clients)
         print(f"{document_type} gerado com sucesso: {pdf_path}")
         os.remove(pdf_path)
-        return file_id, assine_online_id, assinaturas
+        return file_id, assine_online_id, assine_online_uuid, assinaturas
     else:
         print(f"Erro ao gerar {document_type}")
-    return None, None, None
+    return None, None, None, None

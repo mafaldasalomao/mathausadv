@@ -10,6 +10,7 @@ class DocumentModel(db.Model):
     fees = db.Column(db.Text, nullable=True)
     service = db.Column(db.Text, nullable=True)
     assine_online_id = db.Column(db.String(120), nullable=True)
+    assine_online_uuid = db.Column(db.Text, nullable=True)
     gdrive_id = db.Column(db.String(120), nullable=True)
     generated_at =  db.Column(db.DateTime, default=datetime.utcnow)
     signed_at = db.Column(db.DateTime, nullable=True)
@@ -17,9 +18,10 @@ class DocumentModel(db.Model):
 
     client_signatures = relationship('DocumentClientSign', backref='document', cascade='all, delete')
 
-    def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, service, contract_id):
+    def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, assine_online_uuid, service, contract_id):
         self.name = name
         self.assine_online_id = assine_online_id
+        self.assine_online_uuid = assine_online_uuid
         self.gdrive_id = gdrive_id
         self.signed_at = signed_at
         self.fees = fees
@@ -34,6 +36,7 @@ class DocumentModel(db.Model):
             'service': self.service,
             'signed_at': self.signed_at.isoformat() if self.signed_at else None,
             'assine_online_id': self.assine_online_id,
+            'assine_online_uuid': self.assine_online_uuid,
             'gdrive_id': self.gdrive_id,
             'contract_id': self.contract_id
         }
@@ -63,9 +66,10 @@ class DocumentModel(db.Model):
         db.session.commit()
         return True
 
-    def update_document(self, name, assine_online_id, gdrive_id, signed_at,fees, service):
+    def update_document(self, name, assine_online_id, gdrive_id, signed_at, assine_online_uuid, fees, service):
         self.name = name
         self.assine_online_id = assine_online_id
+        self.assine_online_uuid = assine_online_uuid
         self.gdrive_id = gdrive_id
         self.signed_at = signed_at
         self.fees = fees

@@ -90,6 +90,28 @@ def delete_document_google_drive(file_id):
         print(f"Erro ao deletar o documento: {e}")
 
 
+def upload_new_version_to_drive(file_id, file_path):
+    # Autenticação com as credenciais da conta de serviço
+    creds = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+    )
+    service = build('drive', 'v3', credentials=creds)
+    
+    try:
+        # Preparar o arquivo para upload
+        media = MediaFileUpload(file_path, resumable=True)
+
+        # Atualiza o arquivo no Drive
+        file = service.files().update(
+            fileId=file_id,
+            media_body=media
+        ).execute()
+
+        print(f"Nova versão do documento com ID {file_id} enviada com sucesso.")
+    except Exception as e:
+        print(f"Erro ao enviar nova versão do documento: {e}")
+
+
 def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
     url = "https://api.assine.online/v1/file"
     
@@ -112,11 +134,11 @@ def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e
             response.raise_for_status()  # Lança uma exceção para status de erro HTTP
             
             # Retorna o ID do arquivo, assumindo que a resposta inclui um campo 'file_id'
-            return response.json().get("id", "ID not found in response")
+            return response.json().get("id", "ID not found in response"), response.json().get("uuid", "uuid not found in response")
         
         except requests.exceptions.RequestException as e:
             print(f"An error occurred: {e}")
-            return None
+            return None, None
 
 
 def create_workflow_assine_online(data, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
@@ -161,3 +183,30 @@ def get_status_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
+
+
+def get_signed_pdf_assine_online(uuid, pdf_name):
+    url = f"https://api-v1.assine.online/file?q={uuid}"
+    
+
+        
+    try:
+        # Envia o arquivo para a API
+        response = requests.get(url)
+        response.raise_for_status()  # Lança uma exceção para status de erro HTTP
+
+        if response.headers['Content-Type'] == 'application/pdf':
+            # Salva o PDF no caminho especificado
+            with open(f'temp/{pdf_name}', 'wb') as f:
+                f.write(response.content)  # Salva o conteúdo binário do PDF
+            
+            print(f"PDF salvo com sucesso em temp/{pdf_name}")
+            return f'temp/{pdf_name}'
+        else:
+            print("O conteúdo retornado não é um PDF.")
+            return None
+        
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
+

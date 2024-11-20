@@ -82,12 +82,13 @@ class Documents(Resource):
         })
             
         
-        file_id, assine_online_id, assinaturas = gerar_documento(data['document_type'], data, contract.drive_folder_id, non_responsible_clients)
+        file_id, assine_online_id, assine_online_uuid, assinaturas = gerar_documento(data['document_type'], data, contract.drive_folder_id, non_responsible_clients)
         document = {
                     'name': data['document_type'].capitalize(),
                     'service': data['service'],
                     'fees': data['fees'],
                     'contract_id': contract.contract_id,
+                    'assine_online_uuid': assine_online_uuid,
                     'signed_at': None,
                     'assine_online_id': assine_online_id,
                     'gdrive_id': file_id

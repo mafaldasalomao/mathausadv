@@ -5,7 +5,7 @@ from models.contract import ContractModel
 from models.document_client_sign import DocumentClientSign
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
-from resources.document_utils.documentos_html.drive_utils import create_folder, create_workflow_assine_online, get_status_workflow_assine_online
+from resources.document_utils.documentos_html.drive_utils import create_folder, create_workflow_assine_online, get_status_workflow_assine_online, get_signed_pdf_assine_online, upload_new_version_to_drive
 import time
 from datetime import datetime, timedelta
 
@@ -195,10 +195,17 @@ class SendToSigner(Resource):
 class CheckStatusSignature(Resource):
     def get(self):
         #get all contracts
-        contract = ContractModel.query.all()
-        for c in contract:
+        contracts = ContractModel.query.filter(ContractModel.status == 'PRÉ-EXECUÇÃO').all()
+        for c in contracts:
+            if c.workflow_assine_id is None:
+                continue
             status = get_status_workflow_assine_online(c.workflow_assine_id)
             if status == 6:
+                for document in c.documents:
+                    signed_pdf_path = get_signed_pdf_assine_online(document.assine_online_uuid, f'{document.name}.pdf')
+                    upload_new_version_to_drive(signed_pdf_path)
+                    document.signed_at = datetime.now()
+                    document.save_document()
                 c.status = "EXECUÇÃO DO SERVIÇO"
                 c.save_contract()
             if status == 5 or status == 3 or status == 2:
