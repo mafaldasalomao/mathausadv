@@ -2,7 +2,7 @@ from resources.user import User, UserRegister, UserLogin, UserLogout
 from resources.refresh_token import RefreshToken
 from resources.contract import Contracts, Contract, SendToSigner, CheckStatusSignature
 from resources.document import Documents, Document
-from resources.client import Clients, Client, Responsable
+from resources.client import Clients, Client, AllClients,  Responsable
 def create_routes(api):    
 
     api.add_resource(User, '/api/users/<int:user_id>')
@@ -22,5 +22,6 @@ def create_routes(api):
 
     api.add_resource(Client, '/api/v1/user/client/<int:client_id>')
     api.add_resource(Clients, '/api/v1/user/contract/<int:contract_id>/clients')
+    api.add_resource(AllClients, '/api/v1/user/allclients')
     api.add_resource(Responsable, '/api/v1/user/contract/<int:contract_id>/client/<int:client_id>/responsable')
 

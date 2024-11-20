@@ -1,0 +1,18 @@
+@import '../../colors.css';
+
+
+table {
+    width: 100%;
+}
+
+th, td {
+    border-bottom: none;
+}
+
+th {
+    color: var(--orange);
+}
+
+td {
+    color: var(--dark-brown);
+}

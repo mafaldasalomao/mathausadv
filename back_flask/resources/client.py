@@ -3,7 +3,7 @@ from math import ceil
 from models.client import ClientModel
 from models.contract import ContractModel
 from flask_jwt_extended import jwt_required
-from sqlalchemy import func
+from sqlalchemy import func, desc, cast, Date
 import re
 from resources.document_utils.documentos_html.drive_utils import create_folder
 from validate_docbr import CPF, CNPJ
@@ -126,3 +126,53 @@ class Responsable(Resource):
         except Exception as e:
             return {'message': f'An error occurred inserting the client {e}'}, 500
         return client.json(), 201
+    
+
+class AllClients(Resource):
+    @jwt_required()
+    def get(self):
+        # Parâmetros de paginação
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+        offset = (page - 1) * per_page
+
+        # Parâmetros de filtragem
+        name = request.args.get('name', type=str)
+        email = request.args.get('email', type=str)
+        cpf_cnpj = request.args.get('cpf_cnpj', type=str)
+        phone = request.args.get('phone', type=str)
+
+        # Construir a query inicial
+        query = ClientModel.query
+
+        # Adicionar filtros dinamicamente
+        if name:
+            query = query.filter(ClientModel.name.ilike(f"%{name}%"))
+        if email:
+            query = query.filter(ClientModel.email.ilike(f"%{email}%"))
+        if cpf_cnpj:
+            query = query.filter(ClientModel.cpf_cnpj.ilike(f"%{cpf_cnpj}%"))
+        if phone:
+            query = query.filter(ClientModel.phone.ilike(f"%{phone}%"))
+
+        # Contar o total após filtros
+        total_clients = query.count()
+
+        # Calcular o total de páginas
+        total_pages = ceil(total_clients / per_page)
+
+        # Adicionar ordenação e paginação
+        clients = (query
+                     .order_by(desc(ClientModel.name))
+                     .offset(offset)
+                     .limit(per_page)
+                     .all())
+
+        # Retornar os resultados paginados
+        return {
+            'clients': [client.json() for client in clients],
+            'page': page,
+            'per_page': per_page,
+            'total_pages': total_pages,
+            'total_clients': total_clients
+        }

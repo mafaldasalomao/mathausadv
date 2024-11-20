@@ -20,6 +20,7 @@ const ContractList = () => {
   const [searchQueryName, setSearchQueryName] = useState('');
   const [searchQueryDescription, setSearchQueryDescription] = useState('');
   const [searchQueryStatus, setSearchQueryStatus] = useState('');
+  const [searchQueryCreatedAt, setSearchQueryCreatedAt] = useState('');
   const [appliedFilters, setAppliedFilters] = useState({});
 
 
@@ -58,6 +59,7 @@ const ContractList = () => {
       name: searchQueryName,
       description: searchQueryDescription,
       status: searchQueryStatus,
+      created_at: searchQueryCreatedAt
     });
     setPage(1); 
   };
@@ -77,6 +79,8 @@ const ContractList = () => {
         return '🔄'; // Ícone de alteração
       case 'REVISÃO CONTRATUAL':
         return '⚠️'; // Ícone de alerta
+      case 'CANCELADO':
+        return '❌';
       case 'ENCERRAMENTO':
         return '✔️'; // Ícone de check
       default:
@@ -94,7 +98,9 @@ const ContractList = () => {
       case 'ADITIVO':
         return '#f3a600'; // Amarelo
       case 'REVISÃO CONTRATUAL':
-        return '#F44336'; // Vermelho
+        return '#f3a600'; // Vermelho
+      case 'CANCELADO':
+        return '#F44336';
       case 'ENCERRAMENTO':
         return '#9E9E9E'; // Cinza
       default:
@@ -129,6 +135,15 @@ const ContractList = () => {
           variant="outlined"
           value={searchQueryDescription}
           onChange={(e) => setSearchQueryDescription(e.target.value)}
+          style={{ flex: 1 }}
+        />
+          <TextField
+          label="Data de Criação"
+          type="date"
+          variant="outlined"
+          value={searchQueryCreatedAt}
+          onChange={(e) => setSearchQueryCreatedAt(e.target.value)}
+          InputLabelProps={{ shrink: true }} // Garante que o label se mova corretamente
           style={{ flex: 1 }}
         />
         <FormControl variant="outlined" style={{ flex: 1 }}>

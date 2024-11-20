@@ -52,7 +52,7 @@ def gerar_div_assinaturas(assinaturas):
         if i % 2 == 1 or i == len(assinaturas) - 1:
             div_html += '</div>'
 
-    return div_html + assinatura_daniel
+    return div_html
 
 
 def gerar_lista_contatos(partes):
@@ -61,7 +61,7 @@ def gerar_lista_contatos(partes):
 
         # Gera a linha de contato
         lista_contatos_html += f'''
-            <li>Contratante: {parte.name} - Email: {parte.email} - Telefone: {parte.phone}</li>
+            <li style="font-size: 12px;">Contratante {parte.name.split()[0]}: Email: {parte.email} - Telefone: {parte.phone}</li>
         '''
     
     return lista_contatos_html

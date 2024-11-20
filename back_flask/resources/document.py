@@ -66,7 +66,7 @@ class Documents(Resource):
             if client.responsible is not None:
                 add_client(client.responsible)
 
-
+        all_clients.sort(key=lambda client: client.type == "Representante")
         div_parts = gerar_div_partes(all_clients)
         div_assinaturas = gerar_div_assinaturas(non_responsible_clients)
         div_contatos = gerar_lista_contatos(non_responsible_clients)

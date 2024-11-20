@@ -189,14 +189,16 @@ const Contract = () => {
             });
 
             if (result.isConfirmed) {
-                // Mostra a mensagem e o indicador de progresso
-                const progressContainer = document.getElementById('progressContainer');
-                setShowProgress(true);
-
+                Swal.fire({
+                    title: 'Aguarde...',
+                    html: `Deletando documentos</b>`,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading(); // Mostra o indicador de carregamento
+                    }
+                });
                 // Deleta os documentos um por um
                 for (const [index, document] of documents.entries()) {
-                    setCurrentDocument(`Deletando documento ${index + 1} de ${documents.length}`);
-
                     try {
                         await apiPrivate.delete(`/document/${document.document_id}`, {
                             headers: { 'Content-Type': 'application/json' },
@@ -209,8 +211,6 @@ const Contract = () => {
 
                 // Atualiza a lista de documentos no estado
                 fetchContractDetails();
-                setShowProgress(false); // Esconde o indicador de progresso após a exclusão
-
                 // Exibe uma mensagem de sucesso
                 Swal.fire({
                     title: 'Documentos deletados com sucesso!',
@@ -467,14 +467,14 @@ const Contract = () => {
             <Typography variant="h6" style={{ color: 'var(--orange)', marginBottom: '8px' }}>
                 Documentos
             </Typography>
-            {showProgress && (
+            {/* {showProgress && (
                 <Box display="flex" alignItems="center" mt={2}>
-                    <CircularProgress size={24} color="primary" />
+                    <CircularProgress size={24} color="primary" /> }
                     <Typography variant="body2" style={{ marginLeft: '8px' }}>
                         {currentDocument}
                     </Typography>
                 </Box>
-            )}
+            )} */}
             {parts.length > 0 ? (
                 <List component={Paper}>
                     <TableContainer component={Paper}>

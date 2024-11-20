@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse, request
 from math import ceil
-from sqlalchemy import desc
+from sqlalchemy import desc, cast, Date
 from models.contract import ContractModel
 from models.document_client_sign import DocumentClientSign
 from flask_jwt_extended import jwt_required
@@ -22,6 +22,7 @@ class Contracts(Resource):
         name = request.args.get('name', type=str)
         description = request.args.get('description', type=str)
         status = request.args.get('status', type=str)
+        created_at = request.args.get('created_at', type=str)
 
         # Construir a query inicial
         query = ContractModel.query
@@ -33,6 +34,8 @@ class Contracts(Resource):
             query = query.filter(ContractModel.description.ilike(f"%{description}%"))
         if status:
             query = query.filter(ContractModel.status == status)
+        if created_at:
+            query = query.filter(cast(ContractModel.created_at, Date) == datetime.strptime(created_at, '%Y-%m-%d').date())
 
         # Contar o total após filtros
         total_contracts = query.count()
@@ -198,7 +201,7 @@ class CheckStatusSignature(Resource):
             if status == 6:
                 c.status = "EXECUÇÃO DO SERVIÇO"
                 c.save_contract()
-            if status == 5 or status == 3:
-                c.status = "REVISÃO CONTRATUAL"
+            if status == 5 or status == 3 or status == 2:
+                c.status = "CANCELADO"
                 c.save_contract()
         return {'message': 'check status signature done'}, 200

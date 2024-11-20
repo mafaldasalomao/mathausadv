@@ -22,6 +22,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DescriptionIcon from '@mui/icons-material/Description';
+import Person from '@mui/icons-material/Person';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -114,6 +115,7 @@ const UserLayout = () => {
 
     const items = [
         { text: 'Contratos', icon: <DescriptionIcon sx={{color:'#A11A29'}}/>, route: 'contracts' },
+        { text: 'Clientes', icon: <Person sx={{color:'#A11A29'}}/>, route: 'clients' },
         // { text: 'Texto Completo', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/texto-completo' },
         // { text: 'Análise Petição Inicial', icon: <ArticleIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/analise-pi' },
         // { text: 'Resumo Extrativo', icon: <DescriptionIcon sx={{color:'#A11A29'}}/>, route: '/ai-pdf/resumo-extrativo' },
