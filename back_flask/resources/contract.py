@@ -5,7 +5,7 @@ from models.contract import ContractModel
 from models.document_client_sign import DocumentClientSign
 from flask_jwt_extended import jwt_required
 from sqlalchemy import func
-from resources.document_utils.documentos_html.drive_utils import create_folder, create_workflow_assine_online, get_status_workflow_assine_online, get_signed_pdf_assine_online, upload_new_version_to_drive
+from resources.document_utils.documentos_html.drive_utils import create_folder, cancel_workflow_assine_online, create_workflow_assine_online, get_status_workflow_assine_online, get_signed_pdf_assine_online, upload_new_version_to_drive
 import time
 from datetime import datetime, timedelta
 
@@ -113,6 +113,19 @@ class Contract(Resource):
                 return {'message': 'Contract deleted'}
             else:
                 return {'message': 'Cannot delete contract'}, 400
+        return {'message': 'Contract not found'}, 404
+    
+    @jwt_required()
+    def patch(self, contract_id):
+        contract = ContractModel.find_document(contract_id)
+        if contract:
+            try:
+                cancel_workflow_assine_online(contract.workflow_assine_id)  
+                contract.status = 'CANCELADO'
+                contract.save_contract()
+                return contract.json()
+            except Exception as e:
+                return {'message': f'An error occurred updating the contract {e}'}, 500
         return {'message': 'Contract not found'}, 404
     
 

@@ -183,7 +183,26 @@ def get_status_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
+def cancel_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+    url = f"https://api.assine.online/v1/workflow/{workflow_id}"
+    
+    headers = {
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        'Authorization': f'Bearer {token}'
+    }
 
+        
+    try:
+        # Envia o arquivo para a API
+        payload = {
+            'status': 2
+        }
+        response = requests.patch(url, headers=headers, data=payload)
+        response.raise_for_status()  # Lança uma exceção para status de erro HTTP
+        
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
 
 def get_signed_pdf_assine_online(uuid, pdf_name):
     url = f"https://api-v1.assine.online/file?q={uuid}"
