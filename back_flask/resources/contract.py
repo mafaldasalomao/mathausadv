@@ -216,7 +216,8 @@ class CheckStatusSignature(Resource):
             status = get_status_workflow_assine_online(c.workflow_assine_id)
             if status == 6:
                 for document in c.documents:
-                    signed_pdf_path = get_signed_pdf_assine_online(document.assine_online_uuid, f'{document.name}.pdf')
+                    signed_pdf_path = get_signed_pdf_assine_online(c.workflow_assine_id, document.assine_online_id, f'{document.name}.pdf')
+                    print(signed_pdf_path)
                     upload_new_version_to_drive(document.gdrive_id, signed_pdf_path)
                     document.signed_at = datetime.now()
                     document.save_document()

@@ -204,14 +204,28 @@ def cancel_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254e288
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-def get_signed_pdf_assine_online(uuid, pdf_name):
-    url = f"https://api-v1.assine.online/file?q={uuid}"
+def get_signed_pdf_assine_online(workflow_id, assine_online_id, pdf_name, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+    url = f"https://api.assine.online/v1/workflow/{workflow_id}"
     
+    headers = {
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        'Authorization': f'Bearer {token}'
+    }
 
         
     try:
         # Envia o arquivo para a API
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
+        response = response.json()
+        documents = response.get('_embedded', {}).get('documents', [])
+        url_signed = None
+        for document in documents:
+            print(f"Comparando: {document['_embedded']['originalFile']['id']} com {assine_online_id}")
+            if int(document['_embedded']['originalFile']['id']) == int(assine_online_id):
+                url_signed = document['_embedded']['file']['_links']['download']['href']
+            # print(url_signed)
+        response = requests.get(url_signed)
         response.raise_for_status()  # Lança uma exceção para status de erro HTTP
 
         if response.headers['Content-Type'] == 'application/pdf':
