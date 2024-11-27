@@ -85,16 +85,30 @@ const Contract = () => {
             formData.append('description', contract.description);
             handleClosePopupStatus();
             Swal.showLoading();
-            const response = await apiPrivate.put(`/contract/${contract_id}`, formData,
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+            if (newStatus === 'CANCELADO') {
+                const response = await apiPrivate.patch(`/contract/${contract_id}`,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        withCredentials: true
+                    }
+                );
+                if (response.status === 200) {
+                    setContract(prevContract => ({ ...prevContract, status: newStatus }));
                 }
-            );
-
-            if (response.status === 200) {
-                setContract(prevContract => ({ ...prevContract, status: newStatus }));
+            } else {
+                const response = await apiPrivate.put(`/contract/${contract_id}`, formData,
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        withCredentials: true
+                    }
+                );
+                if (response.status === 200) {
+                    setContract(prevContract => ({ ...prevContract, status: newStatus }));
+                }
             }
+            
+
+           
         } catch (error) {
             console.error('Erro ao atualizar o status do contrato:', error);
         }
@@ -656,6 +670,7 @@ const Contract = () => {
                         <MenuItem value="ADITIVO">ADITIVO</MenuItem>
                         <MenuItem value="REVISÃO CONTRATUAL">REVISÃO CONTRATUAL</MenuItem>
                         <MenuItem value="ENCERRAMENTO">ENCERRAMENTO</MenuItem>
+                        <MenuItem value="CANCELADO">CANCELADO</MenuItem>
                     </Select>
                 </DialogContent>
                 <DialogActions>
