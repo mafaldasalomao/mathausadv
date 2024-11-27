@@ -203,7 +203,7 @@ class CheckStatusSignature(Resource):
             if status == 6:
                 for document in c.documents:
                     signed_pdf_path = get_signed_pdf_assine_online(document.assine_online_uuid, f'{document.name}.pdf')
-                    upload_new_version_to_drive(signed_pdf_path)
+                    upload_new_version_to_drive(document.gdrive_id, signed_pdf_path)
                     document.signed_at = datetime.now()
                     document.save_document()
                 c.status = "EXECUÇÃO DO SERVIÇO"

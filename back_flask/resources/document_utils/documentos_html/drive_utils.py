@@ -209,4 +209,3 @@ def get_signed_pdf_assine_online(uuid, pdf_name):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
-
