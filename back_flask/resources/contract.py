@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy import func
 from resources.document_utils.documentos_html.drive_utils import create_folder, create_workflow_assine_online, get_status_workflow_assine_online, get_signed_pdf_assine_online, upload_new_version_to_drive
 import time
+import os
 from datetime import datetime, timedelta
 
 class Contracts(Resource):
@@ -206,6 +207,7 @@ class CheckStatusSignature(Resource):
                     upload_new_version_to_drive(document.gdrive_id, signed_pdf_path)
                     document.signed_at = datetime.now()
                     document.save_document()
+                    os.remove(signed_pdf_path)
                 c.status = "EXECUÇÃO DO SERVIÇO"
                 c.save_contract()
             if status == 5 or status == 3 or status == 2:
