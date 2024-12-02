@@ -18,10 +18,10 @@ class ClientModel(db.Model):
 
     def __init__(self, name, cpf_cnpj, address, email, phone, contract_id, is_responsible=False, responsible_id=None):
         self.name = name
-        self.cpf_cnpj = cpf_cnpj
+        self.cpf_cnpj = cpf_cnpj.strip()
         self.address = address
-        self.email = email
-        self.phone = phone
+        self.email = email.strip()
+        self.phone = phone.strip()
         self.contract_id = contract_id
         self.responsible_id = responsible_id
         self.is_responsible = is_responsible

@@ -185,7 +185,7 @@ class SendToSigner(Resource):
                 workflowStep = {
                     "user": {
                         "name": client.name,
-                        "email": client.responsible.email if client.responsible else client.email
+                        "email": client.responsible.email.strip() if client.responsible else client.email.strip()
                     },
                     "action": 0,  # Defina a ação conforme necessário
                     "signatureType": 0,  # Defina o tipo de assinatura conforme necessário
@@ -199,11 +199,13 @@ class SendToSigner(Resource):
 
         workflow_data["files"] = files
         workflow_id = create_workflow_assine_online(workflow_data)
-
-        contract.workflow_assine_id = workflow_id
-        contract.status = "PRÉ-EXECUÇÃO"
-        contract.save_contract()
-        return contract.json(), 200
+        if workflow_id is not None:
+            contract.workflow_assine_id = workflow_id
+            contract.status = "PRÉ-EXECUÇÃO"
+            contract.save_contract()
+            return contract.json(), 200
+        else:
+            return {'message': 'Error creating workflow'}, 500
     
 
 class CheckStatusSignature(Resource):

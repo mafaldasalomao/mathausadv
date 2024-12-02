@@ -18,7 +18,7 @@ class DocumentModel(db.Model):
 
     client_signatures = relationship('DocumentClientSign', backref='document', cascade='all, delete')
 
-    def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, assine_online_uuid, service, contract_id):
+    def __init__(self, name, assine_online_id, gdrive_id, signed_at, fees, assine_online_uuid, service, contract_id, generated_at=None):
         self.name = name
         self.assine_online_id = assine_online_id
         self.assine_online_uuid = assine_online_uuid
@@ -27,6 +27,7 @@ class DocumentModel(db.Model):
         self.fees = fees
         self.service = service
         self.contract_id = contract_id
+        self.generated_at = generated_at or datetime.utcnow()
 
     def json(self):
         document_json = {

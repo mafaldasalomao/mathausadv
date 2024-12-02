@@ -15,11 +15,13 @@ class ContractModel(db.Model):
     clients = db.relationship('ClientModel')
     documents = db.relationship('DocumentModel')
 
-    def __init__(self, name, description, drive_folder_id, status):
+    def __init__(self, name, description, drive_folder_id, status, created_at=None, updated_at=None):
         self.name = name
         self.description = description
         self.drive_folder_id = drive_folder_id
         self.status = status
+        self.created_at = created_at or datetime.now(timezone.utc)
+        self.updated_at = updated_at or datetime.now(timezone.utc)
 
     def json(self):
         document_json = {

@@ -112,7 +112,7 @@ def upload_new_version_to_drive(file_id, file_path):
         print(f"Erro ao enviar nova versão do documento: {e}")
 
 
-def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+def upload_to_assine_online(file_path, document_type, token="b0ce6111de7005f365d9dfd92a1918060be4573a"):
     url = "https://api.assine.online/v1/file"
     
     # Abre o arquivo e define os parâmetros para envio
@@ -141,7 +141,7 @@ def upload_to_assine_online(file_path, document_type, token="4dd9e8b1722d864d09e
             return None, None
 
 
-def create_workflow_assine_online(data, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+def create_workflow_assine_online(data, token="b0ce6111de7005f365d9dfd92a1918060be4573a"):
     url = "https://api.assine.online/v1/workflow"
     
     headers = {
@@ -150,10 +150,10 @@ def create_workflow_assine_online(data, token="4dd9e8b1722d864d09e254e288e498d30
         'Authorization': f'Bearer {token}'
     }
     payload = json.dumps(data)
-        
     try:
         # Envia o arquivo para a API
         response = requests.post(url, headers=headers, data=payload)
+        print(response.json())
         response.raise_for_status()  # Lança uma exceção para status de erro HTTP
 
         return response.json().get("id", "ID not found in response")
@@ -163,7 +163,7 @@ def create_workflow_assine_online(data, token="4dd9e8b1722d864d09e254e288e498d30
         return None
     
 
-def get_status_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+def get_status_workflow_assine_online(workflow_id, token="b0ce6111de7005f365d9dfd92a1918060be4573a"):
     url = f"https://api.assine.online/v1/workflow/{workflow_id}"
     
     headers = {
@@ -183,7 +183,7 @@ def get_status_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
         return None
-def cancel_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+def cancel_workflow_assine_online(workflow_id, token="b0ce6111de7005f365d9dfd92a1918060be4573a"):
     url = f"https://api.assine.online/v1/workflow/{workflow_id}"
     
     headers = {
@@ -204,7 +204,7 @@ def cancel_workflow_assine_online(workflow_id, token="4dd9e8b1722d864d09e254e288
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-def get_signed_pdf_assine_online(workflow_id, assine_online_id, pdf_name, token="4dd9e8b1722d864d09e254e288e498d307ca58eb"):
+def get_signed_pdf_assine_online(workflow_id, assine_online_id, pdf_name, token="b0ce6111de7005f365d9dfd92a1918060be4573a"):
     url = f"https://api.assine.online/v1/workflow/{workflow_id}"
     
     headers = {
